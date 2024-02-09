@@ -27,7 +27,7 @@ final readonly class AiCriteriaContainer implements AiCriteriaInterface, \String
         return $this->inner->matches($toMatch);
     }
 
-    public function getValue(): int
+    public function getValue(): int|string
     {
         return $this->inner->getValue();
     }
