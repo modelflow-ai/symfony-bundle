@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace ModelflowAi\Integration\Symfony\Command;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +38,7 @@ final class ChatCommand extends Command
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
         )->format(['where' => 'world', 'feeling' => 'angry']))
-            ->addCriteria(PrivacyRequirement::HIGH)
+            ->addCriteria(PrivacyCriteria::HIGH)
             ->build()
             ->execute();
 

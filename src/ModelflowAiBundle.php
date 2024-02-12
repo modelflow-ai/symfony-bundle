@@ -17,13 +17,16 @@ use ModelflowAi\Core\DecisionTree\DecisionRule;
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
-use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
+use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
+use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Integration\Symfony\Config\AiCriteriaContainer;
+use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
+use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
 use ModelflowAi\MistralAdapter\MistralAdapterFactory;
 use ModelflowAi\OllamaAdapter\OllamaAdapterFactory;
 use ModelflowAi\OpenaiAdapter\OpenaiAdapterFactory;
@@ -61,7 +64,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => true,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::SMART,
+                ModelCriteria::GPT4,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::SMART,
             ],
         ],
         'gpt3.5' => [
@@ -70,7 +75,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::INTERMEDIATE,
+                ModelCriteria::GPT3_5,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::INTERMEDIATE,
             ],
         ],
         'mistral_tiny' => [
@@ -79,7 +86,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::BASIC,
+                ModelCriteria::MISTRAL_TINY,
+                ProviderCriteria::MISTRAL,
+                CapabilityCriteria::BASIC,
             ],
         ],
         'mistral_small' => [
@@ -88,7 +97,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::INTERMEDIATE,
+                ModelCriteria::MISTRAL_SMALL,
+                ProviderCriteria::MISTRAL,
+                CapabilityCriteria::INTERMEDIATE,
             ],
         ],
         'mistral_medium' => [
@@ -97,7 +108,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::ADVANCED,
+                ModelCriteria::MISTRAL_MEDIUM,
+                ProviderCriteria::MISTRAL,
+                CapabilityCriteria::ADVANCED,
             ],
         ],
         'llama2' => [
@@ -106,7 +119,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::BASIC,
+                ModelCriteria::LLAMA2,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
             ],
         ],
         'nexusraven' => [
@@ -115,7 +130,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => true,
             'image_to_text' => false,
             'criteria' => [
-                CapabilityRequirement::BASIC,
+                ModelCriteria::NEXUSRAVEN,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
             ],
         ],
         'llava' => [
@@ -124,7 +141,9 @@ class ModelflowAiBundle extends AbstractBundle
             'functions' => false,
             'image_to_text' => true,
             'criteria' => [
-                CapabilityRequirement::BASIC,
+                ModelCriteria::LLAVA,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
             ],
         ],
     ];
@@ -171,7 +190,7 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->end()
                                 ->arrayNode('criteria')
                                     ->defaultValue([
-                                        $this->getCriteria(PrivacyRequirement::LOW, $isReferenceDumping),
+                                        $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
                                     ])
                                     ->beforeNormalization()
                                         ->ifArray()
@@ -208,7 +227,7 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->end()
                                 ->arrayNode('criteria')
                                     ->defaultValue([
-                                        $this->getCriteria(PrivacyRequirement::MEDIUM, $isReferenceDumping),
+                                        $this->getCriteria(PrivacyCriteria::MEDIUM, $isReferenceDumping),
                                     ])
                                     ->beforeNormalization()
                                         ->ifArray()
@@ -250,7 +269,7 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->end()
                                 ->arrayNode('criteria')
                                     ->defaultValue([
-                                        $this->getCriteria(PrivacyRequirement::HIGH, $isReferenceDumping),
+                                        $this->getCriteria(PrivacyCriteria::HIGH, $isReferenceDumping),
                                     ])
                                     ->beforeNormalization()
                                         ->ifArray()
@@ -531,11 +550,19 @@ class ModelflowAiBundle extends AbstractBundle
                     $adapter,
                 ]);
 
+            $featureCriteria = [];
+            if ($adapter['image_to_text']) {
+                $featureCriteria[] = FeatureCriteria::IMAGE_TO_TEXT;
+            }
+            if ($adapter['functions']) {
+                $featureCriteria[] = FeatureCriteria::FUNCTIONS;
+            }
+
             $container->services()
                 ->set('modelflow_ai.chat_adapter.' . $key . '.rule', DecisionRule::class)
                 ->args([
                     service('modelflow_ai.chat_adapter.' . $key . '.adapter'),
-                    \array_merge($provider['criteria'], $adapter['criteria']),
+                    \array_merge($provider['criteria'], $adapter['criteria'], $featureCriteria),
                 ])
                 ->tag('modelflow_ai.decision_tree.rule');
         }

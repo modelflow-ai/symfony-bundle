@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7baeb51ff2b366ff37e5614cf32f724c",
+    "content-hash": "0b773e28aeb1c279e01406c06138140b",
     "packages": [
         {
             "name": "modelflow-ai/core",
@@ -12,10 +12,9 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "773ffa2ad432109d2c217417e0d6a2f0eb2b8613"
+                "reference": "20dcbf13fa9805308ad28806eacae92973fa0e36"
             },
             "require": {
-                "modelflow-ai/prompt-template": "0.1.x-dev",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -96,94 +95,6 @@
                 "mistral",
                 "ollama",
                 "openai"
-            ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "modelflow-ai/prompt-template",
-            "version": "0.1.x-dev",
-            "dist": {
-                "type": "path",
-                "url": "./../../packages/prompt-template",
-                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
-            },
-            "require": {
-                "php": "^8.2"
-            },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
-            "require-dev": {
-                "php-cs-fixer/shim": "^3.15",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^10.3",
-                "rector/rector": "^0.18.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ModelflowAi\\PromptTemplate\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "ModelflowAi\\PromptTemplate\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "vendor/bin/phpunit"
-                ],
-                "phpstan": [
-                    "@php vendor/bin/phpstan analyze"
-                ],
-                "lint-rector": [
-                    "@php vendor/bin/rector process --dry-run"
-                ],
-                "lint-php-cs": [
-                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
-                ],
-                "lint": [
-                    "@phpstan",
-                    "@lint-php-cs",
-                    "@lint-rector",
-                    "@lint-composer"
-                ],
-                "lint-composer": [
-                    "@composer validate --strict"
-                ],
-                "rector": [
-                    "@php vendor/bin/rector process"
-                ],
-                "php-cs-fix": [
-                    "@php vendor/bin/php-cs-fixer fix"
-                ],
-                "fix": [
-                    "@rector",
-                    "@php-cs-fix"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Johannes Wachter",
-                    "email": "johannes@sulu.io"
-                }
-            ],
-            "description": "Templating library for ai prompts.",
-            "keywords": [
-                "ai",
-                "prompts",
-                "prompts template",
-                "template"
             ],
             "transport-options": {
                 "symlink": true,
@@ -1256,12 +1167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "427ab31004594fc33be53edff3465451739bcc6b"
+                "reference": "f8627d2569925d311f1ccff85e14d1048cc6616f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/427ab31004594fc33be53edff3465451739bcc6b",
-                "reference": "427ab31004594fc33be53edff3465451739bcc6b",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/f8627d2569925d311f1ccff85e14d1048cc6616f",
+                "reference": "f8627d2569925d311f1ccff85e14d1048cc6616f",
                 "shasum": ""
             },
             "require": {
@@ -1395,7 +1306,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-09T14:31:28+00:00"
+            "time": "2024-02-11T14:15:05+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -2407,12 +2318,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "e857946f442a38ec9887505df0987e10e6742663"
+                "reference": "0fccf6dd0d5d2dac7aaabe1500de397bd7f8b8bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/e857946f442a38ec9887505df0987e10e6742663",
-                "reference": "e857946f442a38ec9887505df0987e10e6742663",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/0fccf6dd0d5d2dac7aaabe1500de397bd7f8b8bf",
+                "reference": "0fccf6dd0d5d2dac7aaabe1500de397bd7f8b8bf",
                 "shasum": ""
             },
             "require": {
@@ -2473,7 +2384,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-09T11:42:45+00:00"
+            "time": "2024-02-12T11:15:03+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -3172,17 +3083,106 @@
             }
         },
         {
+            "name": "modelflow-ai/prompt-template",
+            "version": "0.1.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "./../../packages/prompt-template",
+                "reference": "4a3a1c5ed37653272bc16abab2be605a25950968"
+            },
+            "require": {
+                "modelflow-ai/core": "^0.1",
+                "php": "^8.2"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
+            },
+            "require-dev": {
+                "php-cs-fixer/shim": "^3.15",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.18.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ModelflowAi\\PromptTemplate\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "ModelflowAi\\PromptTemplate\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "vendor/bin/phpunit"
+                ],
+                "phpstan": [
+                    "@php vendor/bin/phpstan analyze"
+                ],
+                "lint-rector": [
+                    "@php vendor/bin/rector process --dry-run"
+                ],
+                "lint-php-cs": [
+                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+                ],
+                "lint": [
+                    "@phpstan",
+                    "@lint-php-cs",
+                    "@lint-rector",
+                    "@lint-composer"
+                ],
+                "lint-composer": [
+                    "@composer validate --strict"
+                ],
+                "rector": [
+                    "@php vendor/bin/rector process"
+                ],
+                "php-cs-fix": [
+                    "@php vendor/bin/php-cs-fixer fix"
+                ],
+                "fix": [
+                    "@rector",
+                    "@php-cs-fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johannes Wachter",
+                    "email": "johannes@sulu.io"
+                }
+            ],
+            "description": "Templating library for ai prompts.",
+            "keywords": [
+                "ai",
+                "prompts",
+                "prompts template",
+                "template"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "202aaf6b7c2e1e0a622b0298e9f3f537e4d84018"
+                "reference": "2f5294676c802a62b0549f6bc8983f14294ce369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/202aaf6b7c2e1e0a622b0298e9f3f537e4d84018",
-                "reference": "202aaf6b7c2e1e0a622b0298e9f3f537e4d84018",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/2f5294676c802a62b0549f6bc8983f14294ce369",
+                "reference": "2f5294676c802a62b0549f6bc8983f14294ce369",
                 "shasum": ""
             },
             "require": {
@@ -3230,7 +3230,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-01T08:01:43+00:00"
+            "time": "2024-02-10T11:10:03+00:00"
         },
         {
             "name": "nikic/php-parser",
