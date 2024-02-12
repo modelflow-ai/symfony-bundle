@@ -65,7 +65,7 @@ class ModelflowAiBundle extends AbstractBundle
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::GPT4,
-                ProviderCriteria::OLLAMA,
+                ProviderCriteria::OPENAI,
                 CapabilityCriteria::SMART,
             ],
         ],
@@ -76,7 +76,7 @@ class ModelflowAiBundle extends AbstractBundle
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::GPT3_5,
-                ProviderCriteria::OLLAMA,
+                ProviderCriteria::OPENAI,
                 CapabilityCriteria::INTERMEDIATE,
             ],
         ],
@@ -507,6 +507,10 @@ class ModelflowAiBundle extends AbstractBundle
 
         $adapters = \array_filter($config['adapters'] ?? [], fn (array $adapter) => $adapter['enabled']);
         $providers = \array_filter($config['providers'] ?? [], fn (array $provider) => $provider['enabled']);
+
+        $container->parameters()
+            ->set('modelflow_ai.adapters', $adapters)
+            ->set('modelflow_ai.providers', $providers);
 
         if ($providers['openai']['enabled'] ?? false) {
             if (!\class_exists(OpenaiAdapterFactory::class)) {
