@@ -1,6 +1,20 @@
 # ModelflowAI<br/>Symfony Integration
 
-Integration for ModelflowAI into Symfony.
+This bundle integrates Modelflow-AI into a Symfony project.
+
+## Installation
+
+To install the Symfony Integration package, you need to have PHP 8.2 or higher and Composer installed on your machine.
+Then, you can add the package to your project by running the following command:
+
+```bash
+composer require modelflow-ai/symfony-bundle
+```
+
+## Usage
+
+Detailed usage instructions will be provided in the future. For now, you can refer to the source code and unit tests for
+usage examples.
 
 ## Contributing
 

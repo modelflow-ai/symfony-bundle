@@ -1,0 +1,3 @@
+title: Symfony Integration
+package: symfony-bundle
+description: This bundle integrates Modelflow-AI into a Symfony project.
