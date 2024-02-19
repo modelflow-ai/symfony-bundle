@@ -2540,7 +2540,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/embeddings",
-                "reference": "c6b3f24f90578a7f3385acbb239e21a1e7dc1818"
+                "reference": "112878e81f68763c39f382bec9746829d9474dd7"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -2558,6 +2558,9 @@
                 "phpstan/phpstan-phpunit": "^1.3",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
+            },
+            "suggest": {
+                "modelflow-ai/elasticsearch-embeddings-store": "Embeddings store using Elasticsearch"
             },
             "type": "library",
             "autoload": {
@@ -2617,6 +2620,7 @@
             "keywords": [
                 "ai",
                 "doctrine",
+                "elasticsearch",
                 "embeddings",
                 "ollama",
                 "openai",
@@ -4255,12 +4259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07"
+                "reference": "2783e11fe23ae3e5d68276c56b6461be989afbb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/828c5ab97f96e1045250b57f935d70aa7277da07",
-                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2783e11fe23ae3e5d68276c56b6461be989afbb7",
+                "reference": "2783e11fe23ae3e5d68276c56b6461be989afbb7",
                 "shasum": ""
             },
             "require": {
@@ -4348,7 +4352,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-14T07:01:37+00:00"
+            "time": "2024-02-19T13:53:14+00:00"
         },
         {
             "name": "psr/http-client",
