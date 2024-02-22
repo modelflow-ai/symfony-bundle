@@ -45,7 +45,10 @@ class ModelflowAiBundle extends AbstractBundle
 {
     protected string $extensionAlias = 'modelflow_ai';
 
-    protected ?ContainerInterface $container = null;
+    /**
+     * @var ContainerInterface|null
+     */
+    protected $container = null;
 
     final public const DEFAULT_ADAPTER_KEY_ORDER = [
         'enabled',
