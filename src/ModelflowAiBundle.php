@@ -21,9 +21,12 @@ use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
+use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Experts\Expert;
+use ModelflowAi\Experts\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Integration\Symfony\Config\AiCriteriaContainer;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
@@ -33,7 +36,6 @@ use ModelflowAi\OpenaiAdapter\OpenaiAdapterFactory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -44,11 +46,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ModelflowAiBundle extends AbstractBundle
 {
     protected string $extensionAlias = 'modelflow_ai';
-
-    /**
-     * @var ContainerInterface|null
-     */
-    protected $container = null;
 
     final public const DEFAULT_ADAPTER_KEY_ORDER = [
         'enabled',
@@ -397,6 +394,46 @@ class ModelflowAiBundle extends AbstractBundle
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('experts')
+                    ->defaultValue([])
+                    ->info('You can configure your experts here.')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->isRequired()->end()
+                            ->scalarNode('description')->isRequired()->end()
+                            ->scalarNode('instructions')->isRequired()->end()
+                            ->arrayNode('response_format')
+                                ->children()
+                                    ->enumNode('type')->values(['json_schema'])->isRequired()->end()
+                                    ->variableNode('schema')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('criteria')
+                                ->beforeNormalization()
+                                    ->ifArray()
+                                    ->then(function ($value) use ($isReferenceDumping): array {
+                                        $result = [];
+                                        foreach ($value as $item) {
+                                            if ($item instanceof AiCriteriaInterface) {
+                                                $result[] = $this->getCriteria($item, $isReferenceDumping);
+                                            } else {
+                                                $result[] = $item;
+                                            }
+                                        }
+
+                                        return $result;
+                                    })
+                                ->end()
+                                ->variablePrototype()
+                                    ->validate()
+                                        ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
+                                        ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('chat')
                     ->children()
                         ->arrayNode('adapters')
@@ -489,6 +526,16 @@ class ModelflowAiBundle extends AbstractBundle
      *             }
      *         }>
      *     },
+     *     experts?: array<array{
+     *         name: string,
+     *         description: string,
+     *         instructions: string,
+     *         criteria: AiCriteriaInterface[],
+     *         response_format: array{
+     *             type: string,
+     *             schema: mixed
+     *        }
+     *     }>,
      *     chat?: array{
      *         adapters: string[]
      *     },
@@ -601,7 +648,12 @@ class ModelflowAiBundle extends AbstractBundle
                 ->tag('modelflow_ai.decision_tree.rule');
         }
 
-        foreach ($config['embeddings']['generators'] ?? [] as $key => $embedding) {
+        $generators = $config['embeddings']['generators'] ?? [];
+        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
+            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
+        }
+
+        foreach ($generators as $key => $embedding) {
             $adapterId = $key . '.adapter';
             $container->services()
                 ->set($adapterId, EmbeddingAdapterInterface::class)
@@ -637,6 +689,38 @@ class ModelflowAiBundle extends AbstractBundle
                     service($key . '.splitter'),
                     service($key . '.formatter'),
                     service($adapterId),
+                ]);
+        }
+
+        $experts = $config['experts'] ?? [];
+        if (\count($experts) > 0) {
+            if (!\class_exists(Expert::class)) {
+                throw new \Exception('Experts package is enabled but the package is not installed. Please install it with composer require modelflow-ai/experts');
+            }
+
+            $container->import(\dirname(__DIR__) . '/config/experts.php');
+        }
+
+        foreach ($experts as $key => $expert) {
+            $responseFormatService = null;
+            if ('json_schema' === $expert['response_format']['type']) {
+                $responseFormatId = 'modelflow_ai.experts.' . $key . '.response_format';
+                $responseFormatService = service($responseFormatId);
+                $container->services()
+                    ->set($responseFormatId, JsonSchemaResponseFormat::class)
+                    ->args([
+                        $expert['response_format']['schema'],
+                    ]);
+            }
+
+            $container->services()
+                ->set('modelflow_ai.experts.' . $key, Expert::class)
+                ->args([
+                    $expert['name'],
+                    $expert['description'],
+                    $expert['instructions'],
+                    $expert['criteria'],
+                    $responseFormatService,
                 ]);
         }
     }

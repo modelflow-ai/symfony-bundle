@@ -39,6 +39,7 @@
     },
     "require-dev": {
         "modelflow-ai/embeddings": "^0.1",
+        "modelflow-ai/experts": "^0.1",
         "modelflow-ai/mistral-adapter": "^0.1",
         "modelflow-ai/ollama-adapter": "^0.1",
         "modelflow-ai/openai-adapter": "^0.1",
@@ -53,6 +54,7 @@
         "symfony/filesystem": "^6.0 | ^7.0"
     },
     "suggest": {
+        "modelflow-ai/experts": "Library that provide experts.",
         "modelflow-ai/embeddings": "Library to manage embeddings.",
         "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",
         "modelflow-ai/ollama-adapter": "Adapter to interact with ollama models.",
