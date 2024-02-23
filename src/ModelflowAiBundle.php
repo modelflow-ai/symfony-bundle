@@ -319,14 +319,15 @@ class ModelflowAiBundle extends AbstractBundle
                                 $key = $value['key'];
                                 unset($value['key']);
 
+                                $explicitlyDisabled = ($value['enabled'] ?? null) === false;
                                 $enabled = $value['enabled'] ?? false;
                                 unset($value['enabled']);
 
-                                if (0 !== \count($value)) {
+                                if (!$explicitlyDisabled && 0 !== \count($value)) {
                                     $enabled = true;
                                 }
 
-                                $value = \array_merge(self::DEFAULT_VALUES[$key], $value);
+                                $value = \array_merge(self::DEFAULT_VALUES[$key] ?? [], $value);
                                 $value['enabled'] = $enabled;
 
                                 \uksort($value, fn ($key1, $key2) => (\array_search($key1, self::DEFAULT_ADAPTER_KEY_ORDER, true) > \array_search($key2, self::DEFAULT_ADAPTER_KEY_ORDER, true)) ? 1 : -1);
@@ -531,10 +532,10 @@ class ModelflowAiBundle extends AbstractBundle
      *         description: string,
      *         instructions: string,
      *         criteria: AiCriteriaInterface[],
-     *         response_format: array{
+     *         response_format?: array{
      *             type: string,
      *             schema: mixed
-     *        }
+     *        }|null
      *     }>,
      *     chat?: array{
      *         adapters: string[]
@@ -703,13 +704,14 @@ class ModelflowAiBundle extends AbstractBundle
 
         foreach ($experts as $key => $expert) {
             $responseFormatService = null;
-            if ('json_schema' === $expert['response_format']['type']) {
+            $responseFormat = $expert['response_format'] ?? null;
+            if (null !== $responseFormat && 'json_schema' === $responseFormat['type']) {
                 $responseFormatId = 'modelflow_ai.experts.' . $key . '.response_format';
                 $responseFormatService = service($responseFormatId);
                 $container->services()
                     ->set($responseFormatId, JsonSchemaResponseFormat::class)
                     ->args([
-                        $expert['response_format']['schema'],
+                        $responseFormat['schema'],
                     ]);
             }
 
