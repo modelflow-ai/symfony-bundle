@@ -28,4 +28,5 @@ enum ModelCriteria: string implements AiCriteriaInterface
     case MISTRAL_TINY = 'mistral_tiny';
     case MISTRAL_SMALL = 'mistral_small';
     case MISTRAL_MEDIUM = 'mistral_medium';
+    case MISTRAL_LARGE = 'mistral_large';
 }
