@@ -62,7 +62,7 @@ class ModelflowAiBundle extends AbstractBundle
         'gpt4' => [
             'provider' => 'openai',
             'model' => 'gpt4',
-            'stream' => false,
+            'stream' => true,
             'functions' => true,
             'image_to_text' => false,
             'criteria' => [
@@ -73,8 +73,8 @@ class ModelflowAiBundle extends AbstractBundle
         ],
         'gpt3.5' => [
             'provider' => 'openai',
-            'model' => 'gpt3.5',
-            'stream' => false,
+            'model' => 'gpt3.5-turbo',
+            'stream' => true,
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
