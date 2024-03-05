@@ -86,7 +86,7 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_tiny' => [
             'provider' => 'mistral',
             'model' => Model::TINY->value,
-            'stream' => false,
+            'stream' => true,
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
@@ -98,7 +98,7 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_small' => [
             'provider' => 'mistral',
             'model' => Model::SMALL->value,
-            'stream' => false,
+            'stream' => true,
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
@@ -110,7 +110,7 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_medium' => [
             'provider' => 'mistral',
             'model' => Model::MEDIUM->value,
-            'stream' => false,
+            'stream' => true,
             'functions' => false,
             'image_to_text' => false,
             'criteria' => [
@@ -122,7 +122,7 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_large' => [
             'provider' => 'mistral',
             'model' => Model::LARGE->value,
-            'stream' => false,
+            'stream' => true,
             'functions' => true,
             'image_to_text' => false,
             'criteria' => [
