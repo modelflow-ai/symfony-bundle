@@ -52,7 +52,7 @@ class ModelflowAiBundle extends AbstractBundle
         'enabled',
         'provider',
         'model',
-        'functions',
+        'tools',
         'image_to_text',
         'criteria',
         'priority',
@@ -63,7 +63,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'openai',
             'model' => 'gpt4',
             'stream' => true,
-            'functions' => true,
+            'tools' => true,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::GPT4,
@@ -75,7 +75,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'openai',
             'model' => 'gpt3.5-turbo',
             'stream' => true,
-            'functions' => false,
+            'tools' => true,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::GPT3_5,
@@ -87,7 +87,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::TINY->value,
             'stream' => true,
-            'functions' => false,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_TINY,
@@ -99,7 +99,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::SMALL->value,
             'stream' => true,
-            'functions' => false,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_SMALL,
@@ -111,7 +111,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::MEDIUM->value,
             'stream' => true,
-            'functions' => false,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_MEDIUM,
@@ -123,7 +123,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::LARGE->value,
             'stream' => true,
-            'functions' => true,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_LARGE,
@@ -135,7 +135,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'ollama',
             'model' => 'llama2',
             'stream' => true,
-            'functions' => false,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::LLAMA2,
@@ -147,7 +147,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'ollama',
             'model' => 'nexusraven',
             'stream' => true,
-            'functions' => true,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::NEXUSRAVEN,
@@ -159,7 +159,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'ollama',
             'model' => 'llava',
             'stream' => true,
-            'functions' => false,
+            'tools' => false,
             'image_to_text' => true,
             'criteria' => [
                 ModelCriteria::LLAVA,
@@ -362,7 +362,7 @@ class ModelflowAiBundle extends AbstractBundle
                             ->scalarNode('model')->isRequired()->end()
                             ->integerNode('priority')->defaultValue(0)->end()
                             ->booleanNode('stream')->defaultFalse()->end()
-                            ->booleanNode('functions')->defaultFalse()->end()
+                            ->booleanNode('tools')->defaultFalse()->end()
                             ->booleanNode('image_to_text')->defaultFalse()->end()
                             ->arrayNode('criteria')
                                 ->beforeNormalization()
@@ -531,7 +531,7 @@ class ModelflowAiBundle extends AbstractBundle
      *         model: string,
      *         priority: int,
      *         stream: bool,
-     *         functions: bool,
+     *         tools: bool,
      *         image_to_text: bool,
      *         criteria: AiCriteriaInterface[]
      *     }>,
@@ -632,8 +632,8 @@ class ModelflowAiBundle extends AbstractBundle
             if ($adapter['image_to_text']) {
                 $featureCriteria[] = FeatureCriteria::IMAGE_TO_TEXT;
             }
-            if ($adapter['functions']) {
-                $featureCriteria[] = FeatureCriteria::FUNCTIONS;
+            if ($adapter['tools']) {
+                $featureCriteria[] = FeatureCriteria::TOOLS;
             }
             if ($adapter['stream']) {
                 $featureCriteria[] = FeatureCriteria::STREAM;
