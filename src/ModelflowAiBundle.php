@@ -123,7 +123,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::LARGE->value,
             'stream' => true,
-            'tools' => false,
+            'tools' => true,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_LARGE,
