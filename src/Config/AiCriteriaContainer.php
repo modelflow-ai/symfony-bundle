@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony\Config;
 
+use ModelflowAi\Core\DecisionTree\DecisionEnum;
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 
 final readonly class AiCriteriaContainer implements AiCriteriaInterface, \Stringable
@@ -22,7 +23,7 @@ final readonly class AiCriteriaContainer implements AiCriteriaInterface, \String
     ) {
     }
 
-    public function matches(AiCriteriaInterface $toMatch): bool
+    public function matches(AiCriteriaInterface $toMatch): DecisionEnum
     {
         return $this->inner->matches($toMatch);
     }
