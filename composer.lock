@@ -3103,7 +3103,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "524cb6c6b2acc7e89e9881fdb14f31fe64ecf1fb"
+                "reference": "da54a9ebb109334dd5460440f5ad4453891706ea"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -3114,6 +3114,7 @@
             },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
+                "modelflow-ai/prompt-template": "^0.1",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy": "^1.0@dev",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
@@ -3121,7 +3122,8 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
-                "rector/rector": "^0.18.1"
+                "rector/rector": "^0.18.1",
+                "symfony/dotenv": "7.1.x-dev"
             },
             "type": "library",
             "autoload": {
