@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff0d10b7e80419be217357c3ec303182",
+    "content-hash": "cea50ef54bd479ab6a44f2801d2178a3",
     "packages": [
         {
             "name": "modelflow-ai/core",
@@ -12,21 +12,18 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "11dced9a9fc1da63b356ca2fd257880d91079193"
+                "reference": "57f3573575cc44186743d09028f48aad7be7cab2"
             },
             "require": {
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
-            },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3@stable",
                 "rector/rector": "^0.18.1"
@@ -318,12 +315,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "5688edc7f53f429974982db54eb474b5c66b8c7d"
+                "reference": "d06896b7c6980fa9557ffa4a55f4f321c35e2b53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/5688edc7f53f429974982db54eb474b5c66b8c7d",
-                "reference": "5688edc7f53f429974982db54eb474b5c66b8c7d",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/d06896b7c6980fa9557ffa4a55f4f321c35e2b53",
+                "reference": "d06896b7c6980fa9557ffa4a55f4f321c35e2b53",
                 "shasum": ""
             },
             "require": {
@@ -407,7 +404,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-27T21:03:56+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -492,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "adc16604e16bc1a0b6d815a280edea20e57baeaa"
+                "reference": "35035f2687c06b0d31f9784013595476e8766bb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/adc16604e16bc1a0b6d815a280edea20e57baeaa",
-                "reference": "adc16604e16bc1a0b6d815a280edea20e57baeaa",
+                "url": "https://api.github.com/repos/symfony/config/zipball/35035f2687c06b0d31f9784013595476e8766bb8",
+                "reference": "35035f2687c06b0d31f9784013595476e8766bb8",
                 "shasum": ""
             },
             "require": {
@@ -559,7 +556,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-27T21:03:56+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/console",
@@ -567,12 +564,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "3ecfc9e5c9ec828260091c9e30417dabead0ddf8"
+                "reference": "1dace4192a491370791e27095887d717e680f4e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/3ecfc9e5c9ec828260091c9e30417dabead0ddf8",
-                "reference": "3ecfc9e5c9ec828260091c9e30417dabead0ddf8",
+                "url": "https://api.github.com/repos/symfony/console/zipball/1dace4192a491370791e27095887d717e680f4e2",
+                "reference": "1dace4192a491370791e27095887d717e680f4e2",
                 "shasum": ""
             },
             "require": {
@@ -652,7 +649,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T22:31:42+00:00"
+            "time": "2024-04-01T19:02:47+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -660,12 +657,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "af02616263a9c7279dbcbfde7bcdda759baf6c7c"
+                "reference": "55d16f0116ac166d92412190f0539ca886dd6462"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/af02616263a9c7279dbcbfde7bcdda759baf6c7c",
-                "reference": "af02616263a9c7279dbcbfde7bcdda759baf6c7c",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/55d16f0116ac166d92412190f0539ca886dd6462",
+                "reference": "55d16f0116ac166d92412190f0539ca886dd6462",
                 "shasum": ""
             },
             "require": {
@@ -732,7 +729,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T22:31:42+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1040,12 +1037,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "69b75b9bbb1484285c0609ae4a94ac2d1ee0adf2"
+                "reference": "bddc353b1ad64504936f18217474f5dc21295849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/69b75b9bbb1484285c0609ae4a94ac2d1ee0adf2",
-                "reference": "69b75b9bbb1484285c0609ae4a94ac2d1ee0adf2",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/bddc353b1ad64504936f18217474f5dc21295849",
+                "reference": "bddc353b1ad64504936f18217474f5dc21295849",
                 "shasum": ""
             },
             "require": {
@@ -1095,7 +1092,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-24T21:26:19+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1314,12 +1311,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "44357c7a1a44aed875fc869e5facd34ccb1175a9"
+                "reference": "d2729068ec784cf2189b16b7d5000af7f1a9172d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/44357c7a1a44aed875fc869e5facd34ccb1175a9",
-                "reference": "44357c7a1a44aed875fc869e5facd34ccb1175a9",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/d2729068ec784cf2189b16b7d5000af7f1a9172d",
+                "reference": "d2729068ec784cf2189b16b7d5000af7f1a9172d",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1380,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-24T22:18:27+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -1391,12 +1388,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "62f6ed86b4e3a02a3963abf58bd26485b3d12d9e"
+                "reference": "70cc79fcd0c35978c26700de020215c3016db384"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/62f6ed86b4e3a02a3963abf58bd26485b3d12d9e",
-                "reference": "62f6ed86b4e3a02a3963abf58bd26485b3d12d9e",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/70cc79fcd0c35978c26700de020215c3016db384",
+                "reference": "70cc79fcd0c35978c26700de020215c3016db384",
                 "shasum": ""
             },
             "require": {
@@ -1495,7 +1492,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-19T11:57:44+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2454,22 +2451,19 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/api-client",
-                "reference": "0b09e3de0ea7eb4bceaa9fb5b3cfc8d850fb991e"
+                "reference": "e6288e00d0210c80a28b6cfbee7f69ebd3a5354b"
             },
             "require": {
                 "php": "^8.2",
                 "symfony/http-client": "^6.4 || ^7.0",
                 "webmozart/assert": "^1.11"
             },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.0@dev",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -2544,7 +2538,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/embeddings",
-                "reference": "dcdd8d310b670d04c292e24a4f3c123c52d85ec0"
+                "reference": "95922ac542b61311dcf45badb8462baff7ff3f76"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -2552,13 +2546,10 @@
                 "psr/cache": "^3.0@dev",
                 "symfony/property-access": "^6.4 || ^7.0"
             },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -2643,21 +2634,18 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/experts",
-                "reference": "d477b9fbb8ddb8bfdcf241a64d6f08d72d9e5d67"
+                "reference": "317774a09f9e7be759a8045ceeca24f45bf6438b"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
                 "php": "^8.2"
-            },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -2738,22 +2726,19 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral",
-                "reference": "8ad610c2a7dc9dcc0007eb9647e5e899b303b38a"
+                "reference": "b60c99f6c514426540d8d825aed629d3dbb2431e"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.1",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
@@ -2831,7 +2816,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "47c0009c14bd6f45108c96db9bf4670b3143a372"
+                "reference": "60ade96f74c541f0d9044b3ed78013879ab6d253"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -2844,7 +2829,7 @@
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
@@ -2921,22 +2906,19 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama",
-                "reference": "c6c231de95ee0842bea95c78396685a02b6b9142"
+                "reference": "cbd4544d04091b68b0b3d05fd5e380b16438fc9f"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.1",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -3013,7 +2995,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "cabffee1691aa9cc9adc883b4a4abd32436c2628"
+                "reference": "473309c32c9ef87e9e4f6ae40c920717f80bb56f"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -3026,7 +3008,7 @@
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -3103,7 +3085,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "da54a9ebb109334dd5460440f5ad4453891706ea"
+                "reference": "382aacb7222e9559c5b98e12dd1b684efe5711d4"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -3119,7 +3101,7 @@
                 "phpspec/prophecy": "^1.0@dev",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
@@ -3197,19 +3179,16 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/prompt-template",
-                "reference": "b7d0edd86fdd00be207b03bb149b6649db6314c6"
+                "reference": "b3fc0fbf85ebea0db7579e23a6faab606b892e74"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
                 "php": "^8.2"
             },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
                 "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^1.10, <1.10.55",
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
@@ -4366,12 +4345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "18f8d4a5f52b61fdd9370aaae3167daa0eeb69cd"
+                "reference": "b24c32d0bca9e16979dd486d16ca64261bddbdf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/18f8d4a5f52b61fdd9370aaae3167daa0eeb69cd",
-                "reference": "18f8d4a5f52b61fdd9370aaae3167daa0eeb69cd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b24c32d0bca9e16979dd486d16ca64261bddbdf9",
+                "reference": "b24c32d0bca9e16979dd486d16ca64261bddbdf9",
                 "shasum": ""
             },
             "require": {
@@ -4459,7 +4438,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T10:08:10+00:00"
+            "time": "2024-04-02T09:17:27+00:00"
         },
         {
             "name": "psr/http-client",
@@ -5122,12 +5101,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "91cd41d1aebcea0bca6dbba73a3c4ed1c5bdcbc3"
+                "reference": "58c3825286d552a4309b88426d0d636c4bb82876"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/91cd41d1aebcea0bca6dbba73a3c4ed1c5bdcbc3",
-                "reference": "91cd41d1aebcea0bca6dbba73a3c4ed1c5bdcbc3",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/58c3825286d552a4309b88426d0d636c4bb82876",
+                "reference": "58c3825286d552a4309b88426d0d636c4bb82876",
                 "shasum": ""
             },
             "require": {
@@ -5192,7 +5171,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-29T07:01:53+00:00"
+            "time": "2024-03-31T06:20:24+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -5609,18 +5588,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "4ae8ff485b8c9e0ffc3de88cb9f14c0df1447b32"
+                "reference": "6b89def054e3332130ee51f2481b5d297645d5ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/4ae8ff485b8c9e0ffc3de88cb9f14c0df1447b32",
-                "reference": "4ae8ff485b8c9e0ffc3de88cb9f14c0df1447b32",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/6b89def054e3332130ee51f2481b5d297645d5ab",
+                "reference": "6b89def054e3332130ee51f2481b5d297645d5ab",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
-                "symfony/http-client-contracts": "^3",
+                "symfony/http-client-contracts": "^3.4.1",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -5694,7 +5673,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-21T07:56:42+00:00"
+            "time": "2024-04-01T20:51:40+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -5702,12 +5681,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "80c5a0381d1f2207277208277dd4a8abc0f302c4"
+                "reference": "46a7e30d7c89c4c894c7eaf7eeada4cc77b50817"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/80c5a0381d1f2207277208277dd4a8abc0f302c4",
-                "reference": "80c5a0381d1f2207277208277dd4a8abc0f302c4",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/46a7e30d7c89c4c894c7eaf7eeada4cc77b50817",
+                "reference": "46a7e30d7c89c4c894c7eaf7eeada4cc77b50817",
                 "shasum": ""
             },
             "require": {
@@ -5773,7 +5752,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:06:13+00:00"
+            "time": "2024-04-01T18:51:41+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -5857,12 +5836,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "67c3bc02c09e1ac71b63db97e7a63a5422d23840"
+                "reference": "8d32db6d7e9ef9bda977569af2d83c75a01973d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/67c3bc02c09e1ac71b63db97e7a63a5422d23840",
-                "reference": "67c3bc02c09e1ac71b63db97e7a63a5422d23840",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/8d32db6d7e9ef9bda977569af2d83c75a01973d1",
+                "reference": "8d32db6d7e9ef9bda977569af2d83c75a01973d1",
                 "shasum": ""
             },
             "require": {
@@ -5932,7 +5911,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T22:31:42+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -5940,12 +5919,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "e5e14c8af654948dc59b6162e07648a0101de567"
+                "reference": "08a78438320f35a1247462f14fa8fbd3c32db47e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/e5e14c8af654948dc59b6162e07648a0101de567",
-                "reference": "e5e14c8af654948dc59b6162e07648a0101de567",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/08a78438320f35a1247462f14fa8fbd3c32db47e",
+                "reference": "08a78438320f35a1247462f14fa8fbd3c32db47e",
                 "shasum": ""
             },
             "require": {
@@ -6003,7 +5982,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-21T09:01:35+00:00"
+            "time": "2024-04-01T11:34:39+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -6065,5 +6044,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
