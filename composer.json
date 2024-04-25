@@ -30,7 +30,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "modelflow-ai/core": "^0.1",
+        "modelflow-ai/core": "^0.2",
         "symfony/console": "^6.2 | ^7.0",
         "symfony/dependency-injection": "^6.2 | ^7.0",
         "symfony/http-kernel": "^6.2 | ^7.0",
@@ -38,12 +38,12 @@
         "symfony/framework-bundle": "^6.2 | ^7.0"
     },
     "require-dev": {
-        "modelflow-ai/embeddings": "^0.1",
-        "modelflow-ai/experts": "^0.1",
-        "modelflow-ai/mistral-adapter": "^0.1",
-        "modelflow-ai/ollama-adapter": "^0.1",
-        "modelflow-ai/openai-adapter": "^0.1",
-        "modelflow-ai/prompt-template": "^0.1",
+        "modelflow-ai/embeddings": "^0.2",
+        "modelflow-ai/experts": "^0.2",
+        "modelflow-ai/mistral-adapter": "^0.2",
+        "modelflow-ai/ollama-adapter": "^0.2",
+        "modelflow-ai/openai-adapter": "^0.2",
+        "modelflow-ai/prompt-template": "^0.2",
         "php-cs-fixer/shim": "^3.15",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.10, <1.10.55",
