@@ -20,13 +20,23 @@ enum ModelCriteria: string implements AiCriteriaInterface
 {
     use FlagCriteriaTrait;
 
+    // Ollama
     case LLAMA2 = 'llama2';
     case NEXUSRAVEN = 'nexusraven';
     case LLAVA = 'llava';
+
+    // OpenAI
     case GPT4 = 'gpt4';
-    case GPT3_5 = 'gpt3.5';
+    case GPT3_5 = 'gpt3.5-turbo';
+
+    // Mistral
     case MISTRAL_TINY = 'mistral_tiny';
     case MISTRAL_SMALL = 'mistral_small';
     case MISTRAL_MEDIUM = 'mistral_medium';
     case MISTRAL_LARGE = 'mistral_large';
+
+    // Anthropic
+    case CLAUDE_3_OPUS = 'claude-3-opus-20240229';
+    case CLAUDE_3_SONNET = 'claude-3-sonnet-20240229';
+    case CLAUDE_3_HAIKU = 'claude-3-haiku-20240307';
 }

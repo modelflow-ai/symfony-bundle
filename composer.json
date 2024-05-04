@@ -38,6 +38,7 @@
         "symfony/framework-bundle": "^6.2 | ^7.0"
     },
     "require-dev": {
+        "modelflow-ai/anthropic-adapter": "^0.2",
         "modelflow-ai/embeddings": "^0.2",
         "modelflow-ai/experts": "^0.2",
         "modelflow-ai/mistral-adapter": "^0.2",
@@ -56,6 +57,7 @@
     "suggest": {
         "modelflow-ai/experts": "Library that provide experts.",
         "modelflow-ai/embeddings": "Library to manage embeddings.",
+        "modelflow-ai/anthropic-adapter": "Adapter to interact with anthropic models.",
         "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",
         "modelflow-ai/ollama-adapter": "Adapter to interact with ollama models.",
         "modelflow-ai/openai-adapter": "Adapter to interact with openai models."

@@ -16,6 +16,7 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->skip([
+            __DIR__ . '/config/providers/anthropic.php',
             __DIR__ . '/config/providers/mistral.php',
             __DIR__ . '/config/providers/ollama.php',
             __DIR__ . '/config/providers/openai.php',

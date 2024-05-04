@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony;
 
+use ModelflowAi\AnthropicAdapter\AnthropicAdapterFactory;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
@@ -60,8 +61,8 @@ class ModelflowAiBundle extends AbstractBundle
 
     final public const DEFAULT_VALUES = [
         'gpt4' => [
-            'provider' => 'openai',
-            'model' => 'gpt4',
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::GPT4->value,
             'stream' => true,
             'tools' => true,
             'image_to_text' => false,
@@ -72,8 +73,8 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'gpt3.5' => [
-            'provider' => 'openai',
-            'model' => 'gpt3.5-turbo',
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::GPT3_5->value,
             'stream' => true,
             'tools' => true,
             'image_to_text' => false,
@@ -84,7 +85,7 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'mistral_tiny' => [
-            'provider' => 'mistral',
+            'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::TINY->value,
             'stream' => true,
             'tools' => false,
@@ -96,7 +97,7 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'mistral_small' => [
-            'provider' => 'mistral',
+            'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::SMALL->value,
             'stream' => true,
             'tools' => false,
@@ -108,7 +109,7 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'mistral_medium' => [
-            'provider' => 'mistral',
+            'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::MEDIUM->value,
             'stream' => true,
             'tools' => false,
@@ -120,7 +121,7 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'mistral_large' => [
-            'provider' => 'mistral',
+            'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::LARGE->value,
             'stream' => true,
             'tools' => true,
@@ -132,8 +133,8 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'llama2' => [
-            'provider' => 'ollama',
-            'model' => 'llama2',
+            'provider' => ProviderCriteria::OLLAMA->value,
+            'model' => ModelCriteria::LLAMA2->value,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
@@ -144,8 +145,8 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'nexusraven' => [
-            'provider' => 'ollama',
-            'model' => 'nexusraven',
+            'provider' => ProviderCriteria::OLLAMA->value,
+            'model' => ModelCriteria::NEXUSRAVEN->value,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
@@ -156,14 +157,50 @@ class ModelflowAiBundle extends AbstractBundle
             ],
         ],
         'llava' => [
-            'provider' => 'ollama',
-            'model' => 'llava',
+            'provider' => ProviderCriteria::OLLAMA->value,
+            'model' => ModelCriteria::LLAVA->value,
             'stream' => true,
             'tools' => false,
             'image_to_text' => true,
             'criteria' => [
                 ModelCriteria::LLAVA,
                 ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
+        'claude_3_opus' => [
+            'provider' => ProviderCriteria::ANTHROPIC->value,
+            'model' => ModelCriteria::CLAUDE_3_OPUS->value,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'criteria' => [
+                ModelCriteria::CLAUDE_3_OPUS,
+                ProviderCriteria::ANTHROPIC,
+                CapabilityCriteria::SMART,
+            ],
+        ],
+        'claude_3_sonnet' => [
+            'provider' => ProviderCriteria::ANTHROPIC->value,
+            'model' => ModelCriteria::CLAUDE_3_SONNET->value,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'criteria' => [
+                ModelCriteria::CLAUDE_3_SONNET,
+                ProviderCriteria::ANTHROPIC,
+                CapabilityCriteria::ADVANCED,
+            ],
+        ],
+        'claude_3_haiku' => [
+            'provider' => ProviderCriteria::ANTHROPIC->value,
+            'model' => ModelCriteria::CLAUDE_3_HAIKU->value,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'criteria' => [
+                ModelCriteria::CLAUDE_3_HAIKU,
+                ProviderCriteria::ANTHROPIC,
                 CapabilityCriteria::BASIC,
             ],
         ],
@@ -249,6 +286,44 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->arrayNode('criteria')
                                     ->defaultValue([
                                         $this->getCriteria(PrivacyCriteria::MEDIUM, $isReferenceDumping),
+                                    ])
+                                    ->beforeNormalization()
+                                        ->ifArray()
+                                        ->then(function ($value) use ($isReferenceDumping): array {
+                                            $result = [];
+                                            foreach ($value as $item) {
+                                                if ($item instanceof AiCriteriaInterface) {
+                                                    $result[] = $this->getCriteria($item, $isReferenceDumping);
+                                                } else {
+                                                    $result[] = $item;
+                                                }
+                                            }
+
+                                            return $result;
+                                        })
+                                    ->end()
+                                    ->variablePrototype()
+                                        ->validate()
+                                            ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
+                                            ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('anthropic')
+                            ->children()
+                                ->booleanNode('enabled')->defaultFalse()->end()
+                                ->arrayNode('credentials')
+                                    ->isRequired()
+                                    ->children()
+                                        ->scalarNode('api_key')->isRequired()->end()
+                                    ->end()
+                                ->end()
+                                ->integerNode('max_tokens')->defaultValue(1024)->end()
+                                ->arrayNode('criteria')
+                                    ->defaultValue([
+                                        $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
                                     ])
                                     ->beforeNormalization()
                                         ->ifArray()
@@ -519,6 +594,14 @@ class ModelflowAiBundle extends AbstractBundle
      *             },
      *             criteria: AiCriteriaInterface[]
      *         },
+     *         anthropic: array{
+     *             enabled: bool,
+     *             credentials: array{
+     *                 api_key: string
+     *             },
+     *             max_tokens: int,
+     *             criteria: AiCriteriaInterface[]
+     *         },
      *         ollama: array{
      *             enabled: bool,
      *             url: string,
@@ -600,6 +683,14 @@ class ModelflowAiBundle extends AbstractBundle
             }
 
             $container->import(\dirname(__DIR__) . '/config/providers/mistral.php');
+        }
+
+        if ($providers['anthropic']['enabled'] ?? false) {
+            if (!\class_exists(AnthropicAdapterFactory::class)) {
+                throw new \Exception('Anthropic adapter is enabled but the Anthropic adapter library is not installed. Please install it with composer require modelflow-ai/anthropic-adapter');
+            }
+
+            $container->import(\dirname(__DIR__) . '/config/providers/anthropic.php');
         }
 
         if ($providers['ollama']['enabled'] ?? false) {
