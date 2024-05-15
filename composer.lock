@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "0c7d3ce23a6908ca52b1a832f76e87fd83b31f92"
+                "reference": "5ba4a45d97d1b2dbd0816fdb74f10e61ee1360f3"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -41,6 +41,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2458,7 +2461,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic",
-                "reference": "614412e77fd9b495be2b81504d35f562e600773e"
+                "reference": "f11c4dc017cd0cf8b2a23fe3efd17fba041e4e1a"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.2",
@@ -2488,6 +2491,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2548,7 +2554,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic-adapter",
-                "reference": "e929e7c32d67110cd4e3bb1aee4433a381701466"
+                "reference": "ffe563f5f438c06f85d2bd637d337c43a8d53a80"
             },
             "require": {
                 "modelflow-ai/anthropic": "^0.2",
@@ -2579,6 +2585,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2638,7 +2647,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/api-client",
-                "reference": "e6288e00d0210c80a28b6cfbee7f69ebd3a5354b"
+                "reference": "0b55d0b46e7c51a4e32952814d95478b723a3194"
             },
             "require": {
                 "php": "^8.2",
@@ -2667,6 +2676,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2725,7 +2737,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/embeddings",
-                "reference": "c029bddd55a1504f97e7fbb4998a6d32ae865bf4"
+                "reference": "8e115a4bf1806209d84c5eb5a5d8f3cf7fad8b9c"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -2757,6 +2769,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2821,7 +2836,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/experts",
-                "reference": "cbb105a81188cfa87aaa4fb458daff3372c19942"
+                "reference": "f9042cfcd826ba873fa2450f0373d76ee8878c9d"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -2849,6 +2864,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -2913,7 +2931,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/image",
-                "reference": "b427491b4a721642bc8fce6c83e1ba716d13d836"
+                "reference": "4e4c46dbb95f899ab9134125022562ee352fc61e"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -2947,6 +2965,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3007,7 +3028,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral",
-                "reference": "d6a3de84ded74621877957fe151e30ffc18899e0"
+                "reference": "366141a8d17e9d51559a98447c535cd38a9df807"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.2",
@@ -3037,6 +3058,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3097,7 +3121,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "5adef42350b168b30104fa8fb741ba7ffa8ebd99"
+                "reference": "bef485201fc913b4428a42304082b62977929985"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -3128,6 +3152,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3187,7 +3214,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama",
-                "reference": "7f776ec139718ebcb4b221da7746b7a3d5e44827"
+                "reference": "63fb8f187231f1ed69dcaf7df21584d0f628606b"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.2",
@@ -3216,6 +3243,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3276,7 +3306,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "6eb54cc01bd8dd372fa57597e4e2c16267f7e211"
+                "reference": "1bc94b2a992532174fb7f2bd155e95fe4c622f1e"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -3306,6 +3336,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3366,7 +3399,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "909ac6bc1b337738e8feecbad751d4787a0324ac"
+                "reference": "d451ef67622b07128d3ab0ac34cb91e524329066"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -3402,6 +3435,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"
@@ -3462,7 +3498,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/prompt-template",
-                "reference": "5bbf6e8bc65906f5cf16754f9ea4a801a33e4fc7"
+                "reference": "b3eb4afb92ccd8d13dafe51ed244a683e232fe5f"
             },
             "require": {
                 "modelflow-ai/core": "^0.2",
@@ -3488,6 +3524,9 @@
                 }
             },
             "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
                 "test": [
                     "Composer\\Config::disableProcessTimeout",
                     "vendor/bin/phpunit"

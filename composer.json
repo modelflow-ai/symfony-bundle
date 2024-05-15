@@ -65,6 +65,7 @@
         "modelflow-ai/openai-adapter": "Adapter to interact with openai models."
     },
     "scripts": {
+        "test-with-coverage": "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml",
         "test": [
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpunit"
