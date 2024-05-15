@@ -47,23 +47,6 @@ modelflow_ai:
                 cache:
                     enabled: true
                     cache_pool: cache.app
-
-    chat:
-        adapters:
-            - gpt4
-            - gpt3.5
-            - mistral_tiny
-            - mistral_small
-            - mistral_medium
-            - llama2
-            - nexusraven
-            - llava
-
-    text:
-        adapters:
-            - llama2
-            - nexusraven
-            - llava
 ```
 
 ## Expects

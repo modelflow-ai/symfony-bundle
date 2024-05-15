@@ -28,6 +28,8 @@ use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Experts\Expert;
 use ModelflowAi\Experts\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\Image\Adapter\AIImageAdapterInterface;
+use ModelflowAi\Image\ImagePackage;
 use ModelflowAi\Integration\Symfony\Config\AiCriteriaContainer;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
@@ -36,6 +38,7 @@ use ModelflowAi\MistralAdapter\MistralAdapterFactory;
 use ModelflowAi\OllamaAdapter\OllamaAdapterFactory;
 use ModelflowAi\OpenaiAdapter\OpenaiAdapterFactory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -47,14 +50,19 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ModelflowAiBundle extends AbstractBundle
 {
+    final public const TAG_IMAGE_DECISION_TREE_RULE = 'modelflow_ai.image_request_handler.decision_tree.rule';
+
     protected string $extensionAlias = 'modelflow_ai';
 
     final public const DEFAULT_ADAPTER_KEY_ORDER = [
         'enabled',
-        'provider',
         'model',
+        'provider',
+        'chat',
+        'completion',
         'tools',
         'image_to_text',
+        'text_to_image',
         'criteria',
         'priority',
     ];
@@ -63,9 +71,12 @@ class ModelflowAiBundle extends AbstractBundle
         'gpt4' => [
             'provider' => ProviderCriteria::OPENAI->value,
             'model' => ModelCriteria::GPT4->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => true,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::GPT4,
                 ProviderCriteria::OPENAI,
@@ -75,21 +86,57 @@ class ModelflowAiBundle extends AbstractBundle
         'gpt3.5' => [
             'provider' => ProviderCriteria::OPENAI->value,
             'model' => ModelCriteria::GPT3_5->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => true,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::GPT3_5,
                 ProviderCriteria::OPENAI,
                 CapabilityCriteria::INTERMEDIATE,
             ],
         ],
+        'dall_e_3' => [
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::DALL_E_3->value,
+            'chat' => false,
+            'completion' => false,
+            'stream' => false,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => true,
+            'criteria' => [
+                ModelCriteria::DALL_E_3,
+                ProviderCriteria::OPENAI,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
+        'dall_e_2' => [
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::DALL_E_2->value,
+            'chat' => false,
+            'completion' => false,
+            'stream' => false,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => true,
+            'criteria' => [
+                ModelCriteria::DALL_E_2,
+                ProviderCriteria::OPENAI,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
         'mistral_tiny' => [
             'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::TINY->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_TINY,
                 ProviderCriteria::MISTRAL,
@@ -99,9 +146,12 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_small' => [
             'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::SMALL->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_SMALL,
                 ProviderCriteria::MISTRAL,
@@ -111,9 +161,12 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_medium' => [
             'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::MEDIUM->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_MEDIUM,
                 ProviderCriteria::MISTRAL,
@@ -123,9 +176,12 @@ class ModelflowAiBundle extends AbstractBundle
         'mistral_large' => [
             'provider' => ProviderCriteria::MISTRAL->value,
             'model' => Model::LARGE->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => true,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_LARGE,
                 ProviderCriteria::MISTRAL,
@@ -135,9 +191,12 @@ class ModelflowAiBundle extends AbstractBundle
         'llama2' => [
             'provider' => ProviderCriteria::OLLAMA->value,
             'model' => ModelCriteria::LLAMA2->value,
+            'chat' => true,
+            'completion' => true,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::LLAMA2,
                 ProviderCriteria::OLLAMA,
@@ -147,9 +206,12 @@ class ModelflowAiBundle extends AbstractBundle
         'nexusraven' => [
             'provider' => ProviderCriteria::OLLAMA->value,
             'model' => ModelCriteria::NEXUSRAVEN->value,
+            'chat' => true,
+            'completion' => true,
             'stream' => true,
             'tools' => false,
             'image_to_text' => false,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::NEXUSRAVEN,
                 ProviderCriteria::OLLAMA,
@@ -159,9 +221,12 @@ class ModelflowAiBundle extends AbstractBundle
         'llava' => [
             'provider' => ProviderCriteria::OLLAMA->value,
             'model' => ModelCriteria::LLAVA->value,
+            'chat' => true,
+            'completion' => true,
             'stream' => true,
             'tools' => false,
             'image_to_text' => true,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::LLAVA,
                 ProviderCriteria::OLLAMA,
@@ -171,9 +236,12 @@ class ModelflowAiBundle extends AbstractBundle
         'claude_3_opus' => [
             'provider' => ProviderCriteria::ANTHROPIC->value,
             'model' => ModelCriteria::CLAUDE_3_OPUS->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => true,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::CLAUDE_3_OPUS,
                 ProviderCriteria::ANTHROPIC,
@@ -183,9 +251,12 @@ class ModelflowAiBundle extends AbstractBundle
         'claude_3_sonnet' => [
             'provider' => ProviderCriteria::ANTHROPIC->value,
             'model' => ModelCriteria::CLAUDE_3_SONNET->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => true,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::CLAUDE_3_SONNET,
                 ProviderCriteria::ANTHROPIC,
@@ -195,9 +266,12 @@ class ModelflowAiBundle extends AbstractBundle
         'claude_3_haiku' => [
             'provider' => ProviderCriteria::ANTHROPIC->value,
             'model' => ModelCriteria::CLAUDE_3_HAIKU->value,
+            'chat' => true,
+            'completion' => false,
             'stream' => true,
             'tools' => false,
             'image_to_text' => true,
+            'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::CLAUDE_3_HAIKU,
                 ProviderCriteria::ANTHROPIC,
@@ -213,6 +287,44 @@ class ModelflowAiBundle extends AbstractBundle
         }
 
         return $criteria;
+    }
+
+    /**
+     * @param AiCriteriaInterface[] $default
+     */
+    public function createCriteriaNode(array $default, bool $isReferenceDumping): ArrayNodeDefinition
+    {
+        $nodeDefinition = new ArrayNodeDefinition('criteria');
+        $nodeDefinition
+            ->defaultValue(\array_map(
+                fn (AiCriteriaInterface $criteria) => $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
+                $default,
+            ));
+        $nodeDefinition
+            ->beforeNormalization()
+                ->ifArray()
+                ->then(function ($value) use ($isReferenceDumping): array {
+                    $result = [];
+                    foreach ($value as $item) {
+                        if ($item instanceof AiCriteriaInterface) {
+                            $result[] = $this->getCriteria($item, $isReferenceDumping);
+                        } else {
+                            $result[] = $item;
+                        }
+                    }
+
+                    return $result;
+                })
+            ->end();
+        $nodeDefinition
+            ->variablePrototype()
+                ->validate()
+                    ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
+                    ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
+                ->end()
+            ->end();
+
+        return $nodeDefinition;
     }
 
     public function configure(DefinitionConfigurator $definition): void
@@ -246,32 +358,7 @@ class ModelflowAiBundle extends AbstractBundle
                                         ->scalarNode('api_key')->isRequired()->end()
                                     ->end()
                                 ->end()
-                                ->arrayNode('criteria')
-                                    ->defaultValue([
-                                        $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
-                                    ])
-                                    ->beforeNormalization()
-                                        ->ifArray()
-                                        ->then(function ($value) use ($isReferenceDumping): array {
-                                            $result = [];
-                                            foreach ($value as $item) {
-                                                if ($item instanceof AiCriteriaInterface) {
-                                                    $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                                } else {
-                                                    $result[] = $item;
-                                                }
-                                            }
-
-                                            return $result;
-                                        })
-                                    ->end()
-                                    ->variablePrototype()
-                                        ->validate()
-                                            ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                            ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                        ->end()
-                                    ->end()
-                                ->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::LOW], $isReferenceDumping))
                             ->end()
                         ->end()
                         ->arrayNode('mistral')
@@ -283,32 +370,7 @@ class ModelflowAiBundle extends AbstractBundle
                                         ->scalarNode('api_key')->isRequired()->end()
                                     ->end()
                                 ->end()
-                                ->arrayNode('criteria')
-                                    ->defaultValue([
-                                        $this->getCriteria(PrivacyCriteria::MEDIUM, $isReferenceDumping),
-                                    ])
-                                    ->beforeNormalization()
-                                        ->ifArray()
-                                        ->then(function ($value) use ($isReferenceDumping): array {
-                                            $result = [];
-                                            foreach ($value as $item) {
-                                                if ($item instanceof AiCriteriaInterface) {
-                                                    $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                                } else {
-                                                    $result[] = $item;
-                                                }
-                                            }
-
-                                            return $result;
-                                        })
-                                    ->end()
-                                    ->variablePrototype()
-                                        ->validate()
-                                            ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                            ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                        ->end()
-                                    ->end()
-                                ->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::MEDIUM], $isReferenceDumping))
                             ->end()
                         ->end()
                         ->arrayNode('anthropic')
@@ -321,32 +383,7 @@ class ModelflowAiBundle extends AbstractBundle
                                     ->end()
                                 ->end()
                                 ->integerNode('max_tokens')->defaultValue(1024)->end()
-                                ->arrayNode('criteria')
-                                    ->defaultValue([
-                                        $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
-                                    ])
-                                    ->beforeNormalization()
-                                        ->ifArray()
-                                        ->then(function ($value) use ($isReferenceDumping): array {
-                                            $result = [];
-                                            foreach ($value as $item) {
-                                                if ($item instanceof AiCriteriaInterface) {
-                                                    $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                                } else {
-                                                    $result[] = $item;
-                                                }
-                                            }
-
-                                            return $result;
-                                        })
-                                    ->end()
-                                    ->variablePrototype()
-                                        ->validate()
-                                            ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                            ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                        ->end()
-                                    ->end()
-                                ->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::LOW], $isReferenceDumping))
                             ->end()
                         ->end()
                         ->arrayNode('ollama')
@@ -363,32 +400,7 @@ class ModelflowAiBundle extends AbstractBundle
                                         ->then(static fn ($value): string => \rtrim((string) $value, '/') . '/')
                                     ->end()
                                 ->end()
-                                ->arrayNode('criteria')
-                                    ->defaultValue([
-                                        $this->getCriteria(PrivacyCriteria::HIGH, $isReferenceDumping),
-                                    ])
-                                    ->beforeNormalization()
-                                        ->ifArray()
-                                        ->then(function ($value) use ($isReferenceDumping): array {
-                                            $result = [];
-                                            foreach ($value as $item) {
-                                                if ($item instanceof AiCriteriaInterface) {
-                                                    $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                                } else {
-                                                    $result[] = $item;
-                                                }
-                                            }
-
-                                            return $result;
-                                        })
-                                    ->end()
-                                    ->variablePrototype()
-                                        ->validate()
-                                            ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                            ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                        ->end()
-                                    ->end()
-                                ->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::HIGH], $isReferenceDumping))
                             ->end()
                         ->end()
                     ->end()
@@ -436,32 +448,13 @@ class ModelflowAiBundle extends AbstractBundle
                             ->scalarNode('provider')->isRequired()->end()
                             ->scalarNode('model')->isRequired()->end()
                             ->integerNode('priority')->defaultValue(0)->end()
+                            ->booleanNode('chat')->defaultFalse()->end()
+                            ->booleanNode('completion')->defaultFalse()->end()
                             ->booleanNode('stream')->defaultFalse()->end()
                             ->booleanNode('tools')->defaultFalse()->end()
                             ->booleanNode('image_to_text')->defaultFalse()->end()
-                            ->arrayNode('criteria')
-                                ->beforeNormalization()
-                                    ->ifArray()
-                                    ->then(function ($value) use ($isReferenceDumping): array {
-                                        $result = [];
-                                        foreach ($value as $item) {
-                                            if ($item instanceof AiCriteriaInterface) {
-                                                $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                            } else {
-                                                $result[] = $item;
-                                            }
-                                        }
-
-                                        return $result;
-                                    })
-                                ->end()
-                                ->variablePrototype()
-                                    ->validate()
-                                        ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                        ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                    ->end()
-                                ->end()
-                            ->end()
+                            ->booleanNode('text_to_image')->defaultFalse()->end()
+                            ->append($this->createCriteriaNode([], $isReferenceDumping))
                         ->end()
                     ->end()
                 ->end()
@@ -506,52 +499,7 @@ class ModelflowAiBundle extends AbstractBundle
                                     ->variableNode('schema')->end()
                                 ->end()
                             ->end()
-                            ->arrayNode('criteria')
-                                ->beforeNormalization()
-                                    ->ifArray()
-                                    ->then(function ($value) use ($isReferenceDumping): array {
-                                        $result = [];
-                                        foreach ($value as $item) {
-                                            if ($item instanceof AiCriteriaInterface) {
-                                                $result[] = $this->getCriteria($item, $isReferenceDumping);
-                                            } else {
-                                                $result[] = $item;
-                                            }
-                                        }
-
-                                        return $result;
-                                    })
-                                ->end()
-                                ->variablePrototype()
-                                    ->validate()
-                                        ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                                        ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('chat')
-                    ->children()
-                        ->arrayNode('adapters')
-                            ->defaultValue([])
-                            ->scalarPrototype()
-                                ->validate()
-                                    ->ifTrue(static function ($value) use (&$adapters): bool {
-                                        return !\in_array($value, \array_keys($adapters), true);
-                                    })
-                                    ->thenInvalid('The value has to be a valid adapter key')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('text')
-                    ->children()
-                        ->arrayNode('adapters')
-                            ->defaultValue([])
-                            ->scalarPrototype()->end()
+                            ->append($this->createCriteriaNode([], $isReferenceDumping))
                         ->end()
                     ->end()
                 ->end()
@@ -612,10 +560,13 @@ class ModelflowAiBundle extends AbstractBundle
      *         enabled: bool,
      *         provider: string,
      *         model: string,
+     *         chat: bool,
+     *         completion: bool,
      *         priority: int,
      *         stream: bool,
      *         tools: bool,
      *         image_to_text: bool,
+     *         text_to_image: bool,
      *         criteria: AiCriteriaInterface[]
      *     }>,
      *     embeddings?: array{
@@ -643,12 +594,6 @@ class ModelflowAiBundle extends AbstractBundle
      *             schema: mixed
      *        }|null
      *     }>,
-     *     chat?: array{
-     *         adapters: string[]
-     *     },
-     *     text?: array{
-     *         adapters: string[]
-     *     }
      * } $config
      */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
@@ -665,43 +610,68 @@ class ModelflowAiBundle extends AbstractBundle
         $adapters = \array_filter($config['adapters'] ?? [], fn (array $adapter) => $adapter['enabled']);
         $providers = \array_filter($config['providers'] ?? [], fn (array $provider) => $provider['enabled']);
 
+        $generators = $config['embeddings']['generators'] ?? [];
+
+        $chatAdapters = [];
+        $completionAdapters = [];
+        $imageAdapters = [];
+        $configFiles = [];
+        foreach ($adapters as $key => $adapter) {
+            $configFiles[] = $adapter['provider'] . '/common.php';
+
+            if ($adapter['chat']) {
+                $chatAdapters[] = $key;
+                $configFiles[] = $adapter['provider'] . '/chat.php';
+            }
+
+            if ($adapter['completion']) {
+                $completionAdapters[] = $key;
+                $configFiles[] = $adapter['provider'] . '/completion.php';
+            }
+
+            if ($adapter['text_to_image']) {
+                $imageAdapters[] = $key;
+                $configFiles[] = $adapter['provider'] . '/image.php';
+            }
+        }
+
+        foreach ($generators as $generator) {
+            $configFiles[] = $generator['provider'] . '/embeddings.php';
+        }
+
+        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
+            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
+        }
+
+        if ([] !== $imageAdapters && !\class_exists(ImagePackage::class)) {
+            throw new \Exception('Image adapters are enabled but the image adapter library is not installed. Please install it with composer require modelflow-ai/image');
+        }
+
         $container->parameters()
             ->set('modelflow_ai.adapters', $adapters)
             ->set('modelflow_ai.providers', $providers);
 
-        if ($providers['openai']['enabled'] ?? false) {
-            if (!\class_exists(OpenaiAdapterFactory::class)) {
-                throw new \Exception('OpenAi adapter is enabled but the OpenAi adapter library is not installed. Please install it with composer require modelflow-ai/openai-adapter');
-            }
-
-            $container->import(\dirname(__DIR__) . '/config/providers/openai.php');
+        if (($providers['openai']['enabled'] ?? false) && !\class_exists(OpenaiAdapterFactory::class)) {
+            throw new \Exception('OpenAi adapter is enabled but the OpenAi adapter library is not installed. Please install it with composer require modelflow-ai/openai-adapter');
         }
 
-        if ($providers['mistral']['enabled'] ?? false) {
-            if (!\class_exists(MistralAdapterFactory::class)) {
-                throw new \Exception('Mistral adapter is enabled but the Mistral adapter library is not installed. Please install it with composer require modelflow-ai/mistral-adapter');
-            }
-
-            $container->import(\dirname(__DIR__) . '/config/providers/mistral.php');
+        if (($providers['mistral']['enabled'] ?? false) && !\class_exists(MistralAdapterFactory::class)) {
+            throw new \Exception('Mistral adapter is enabled but the Mistral adapter library is not installed. Please install it with composer require modelflow-ai/mistral-adapter');
         }
 
-        if ($providers['anthropic']['enabled'] ?? false) {
-            if (!\class_exists(AnthropicAdapterFactory::class)) {
-                throw new \Exception('Anthropic adapter is enabled but the Anthropic adapter library is not installed. Please install it with composer require modelflow-ai/anthropic-adapter');
-            }
-
-            $container->import(\dirname(__DIR__) . '/config/providers/anthropic.php');
+        if (($providers['anthropic']['enabled'] ?? false) && !\class_exists(AnthropicAdapterFactory::class)) {
+            throw new \Exception('Anthropic adapter is enabled but the Anthropic adapter library is not installed. Please install it with composer require modelflow-ai/anthropic-adapter');
         }
 
-        if ($providers['ollama']['enabled'] ?? false) {
-            if (!\class_exists(OllamaAdapterFactory::class)) {
-                throw new \Exception('Ollama adapter is enabled but the Ollama adapter library is not installed. Please install it with composer require modelflow-ai/ollama-adapter');
-            }
-
-            $container->import(\dirname(__DIR__) . '/config/providers/ollama.php');
+        if (($providers['ollama']['enabled'] ?? false) && !\class_exists(OllamaAdapterFactory::class)) {
+            throw new \Exception('Ollama adapter is enabled but the Ollama adapter library is not installed. Please install it with composer require modelflow-ai/ollama-adapter');
         }
 
-        foreach ($config['chat']['adapters'] ?? [] as $key) {
+        foreach (\array_unique($configFiles) as $configFile) {
+            $container->import(\dirname(__DIR__) . '/config/providers/' . $configFile);
+        }
+
+        foreach ($chatAdapters as $key) {
             $adapter = $adapters[$key] ?? null;
             if (!$adapter) {
                 throw new \Exception('Chat adapter ' . $key . ' is enabled but not configured.');
@@ -714,7 +684,7 @@ class ModelflowAiBundle extends AbstractBundle
 
             $container->services()
                 ->set('modelflow_ai.chat_adapter.' . $key . '.adapter', AIModelAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.adapter_factory'), 'createChatAdapter'])
+                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.chat_adapter_factory'), 'createChatAdapter'])
                 ->args([
                     $adapter,
                 ]);
@@ -739,7 +709,7 @@ class ModelflowAiBundle extends AbstractBundle
                 ->tag('modelflow_ai.decision_tree.rule');
         }
 
-        foreach ($config['text']['adapters'] ?? [] as $key) {
+        foreach ($completionAdapters as $key) {
             $adapter = $adapters[$key] ?? null;
             if (!$adapter) {
                 throw new \Exception('Text adapter ' . $key . ' is enabled but not configured.');
@@ -752,7 +722,7 @@ class ModelflowAiBundle extends AbstractBundle
 
             $container->services()
                 ->set('modelflow_ai.text_adapter.' . $key . '.adapter', AIModelAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.adapter_factory'), 'createTextAdapter'])
+                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.completion_adapter_factory'), 'createCompletionAdapter'])
                 ->args([
                     $adapter,
                 ]);
@@ -760,22 +730,48 @@ class ModelflowAiBundle extends AbstractBundle
             $container->services()
                 ->set('modelflow_ai.text_adapter.' . $key . '.rule', DecisionRule::class)
                 ->args([
-                    service('modelflow_ai.chat_adapter.' . $key . '.adapter'),
+                    service('modelflow_ai.text_adapter.' . $key . '.adapter'),
                     \array_merge($provider['criteria'], $adapter['criteria']),
                 ])
                 ->tag('modelflow_ai.decision_tree.rule');
         }
 
-        $generators = $config['embeddings']['generators'] ?? [];
-        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
-            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
+        if ([] !== $imageAdapters) {
+            $container->import(\dirname(__DIR__) . '/config/image.php');
+        }
+
+        foreach ($imageAdapters as $key) {
+            $adapter = $adapters[$key] ?? null;
+            if (!$adapter) {
+                throw new \Exception('Image adapter ' . $key . ' is enabled but not configured.');
+            }
+
+            $provider = $providers[$adapter['provider']] ?? null;
+            if (!$provider) {
+                throw new \Exception('Image adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
+            }
+
+            $container->services()
+                ->set('modelflow_ai.image_adapter.' . $key . '.adapter', AIImageAdapterInterface::class)
+                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.image_adapter_factory'), 'createImageAdapter'])
+                ->args([
+                    $adapter,
+                ]);
+
+            $container->services()
+                ->set('modelflow_ai.image_adapter.' . $key . '.rule', DecisionRule::class)
+                ->args([
+                    service('modelflow_ai.image_adapter.' . $key . '.adapter'),
+                    \array_merge($provider['criteria'], $adapter['criteria']),
+                ])
+                ->tag(self::TAG_IMAGE_DECISION_TREE_RULE);
         }
 
         foreach ($generators as $key => $embedding) {
             $adapterId = $key . '.adapter';
             $container->services()
                 ->set($adapterId, EmbeddingAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $embedding['provider'] . '.adapter_factory'), 'createEmbeddingGenerator'])
+                ->factory([service('modelflow_ai.providers.' . $embedding['provider'] . '.embedding_adapter_factory'), 'createEmbeddingGenerator'])
                 ->args([
                     $embedding,
                 ]);

@@ -16,10 +16,10 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->skip([
-            __DIR__ . '/config/providers/anthropic.php',
-            __DIR__ . '/config/providers/mistral.php',
-            __DIR__ . '/config/providers/ollama.php',
-            __DIR__ . '/config/providers/openai.php',
+            __DIR__ . '/config/providers/anthropic/common.php',
+            __DIR__ . '/config/providers/mistral/common.php',
+            __DIR__ . '/config/providers/ollama/common.php',
+            __DIR__ . '/config/providers/openai/common.php',
         ]);
 
     $config = require __DIR__ . '/../../rector.php';

@@ -16,7 +16,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Factory;
 use ModelflowAi\Mistral\Mistral;
-use ModelflowAi\MistralAdapter\MistralAdapterFactory;
 
 /*
  * @internal
@@ -30,10 +29,4 @@ return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('modelflow_ai.providers.mistral.client', ClientInterface::class)
         ->factory([service('modelflow_ai.providers.mistral.client_factory'), 'make']);
-
-    $container->services()
-        ->set('modelflow_ai.providers.mistral.adapter_factory', MistralAdapterFactory::class)
-        ->args([
-            service('modelflow_ai.providers.mistral.client'),
-        ]);
 };

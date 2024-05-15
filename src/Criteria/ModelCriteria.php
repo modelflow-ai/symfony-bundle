@@ -28,6 +28,8 @@ enum ModelCriteria: string implements AiCriteriaInterface
     // OpenAI
     case GPT4 = 'gpt4';
     case GPT3_5 = 'gpt3.5-turbo';
+    case DALL_E_3 = 'dall-e-3';
+    case DALL_E_2 = 'dall-e-2';
 
     // Mistral
     case MISTRAL_TINY = 'mistral_tiny';

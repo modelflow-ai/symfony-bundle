@@ -41,6 +41,7 @@
         "modelflow-ai/anthropic-adapter": "^0.2",
         "modelflow-ai/embeddings": "^0.2",
         "modelflow-ai/experts": "^0.2",
+        "modelflow-ai/image": "^0.2",
         "modelflow-ai/mistral-adapter": "^0.2",
         "modelflow-ai/ollama-adapter": "^0.2",
         "modelflow-ai/openai-adapter": "^0.2",
@@ -55,8 +56,9 @@
         "symfony/filesystem": "^6.2 | ^7.0"
     },
     "suggest": {
-        "modelflow-ai/experts": "Library that provide experts.",
         "modelflow-ai/embeddings": "Library to manage embeddings.",
+        "modelflow-ai/experts": "Library that provide experts.",
+        "modelflow-ai/image": "Library to generate and manipulate images.",
         "modelflow-ai/anthropic-adapter": "Adapter to interact with anthropic models.",
         "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",
         "modelflow-ai/ollama-adapter": "Adapter to interact with ollama models.",

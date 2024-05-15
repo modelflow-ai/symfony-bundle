@@ -16,18 +16,6 @@ modelflow_ai:
             enabled: true
         llava:
             enabled: true
-
-    chat:
-        adapters:
-            - llama2
-            - nexusraven
-            - llava
-
-    text:
-        adapters:
-            - llama2
-            - nexusraven
-            - llava
 ```
 
 ## Expects
