@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony\Criteria;
 
-use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 use ModelflowAi\Core\Request\Criteria\FlagCriteriaTrait;
+use ModelflowAi\DecisionTree\Criteria\CriteriaInterface;
 
-enum ProviderCriteria: string implements AiCriteriaInterface
+enum ProviderCriteria: string implements CriteriaInterface
 {
     use FlagCriteriaTrait;
 

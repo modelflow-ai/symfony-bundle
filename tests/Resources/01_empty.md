@@ -19,6 +19,6 @@ services:
         tags:
             - { name: console.command, command: modelflow-ai:chat }
 aliases:
-    ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface: modelflow_ai.request_handler.decision_tree
+    ModelflowAi\DecisionTree\DecisionTreeInterface: modelflow_ai.request_handler.decision_tree
     ModelflowAi\Core\AIRequestHandlerInterface: modelflow_ai.request_handler
 ```

@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace ModelflowAi\Integration\Symfony;
 
 use ModelflowAi\AnthropicAdapter\AnthropicAdapterFactory;
-use ModelflowAi\Core\DecisionTree\DecisionRule;
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
+use ModelflowAi\DecisionTree\Criteria\CriteriaInterface;
+use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
@@ -30,7 +30,7 @@ use ModelflowAi\Experts\Expert;
 use ModelflowAi\Experts\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Image\Adapter\AIImageAdapterInterface;
 use ModelflowAi\Image\ImagePackage;
-use ModelflowAi\Integration\Symfony\Config\AiCriteriaContainer;
+use ModelflowAi\Integration\Symfony\Config\CriteriaContainer;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
 use ModelflowAi\Mistral\Model;
@@ -280,24 +280,24 @@ class ModelflowAiBundle extends AbstractBundle
         ],
     ];
 
-    private function getCriteria(AiCriteriaInterface $criteria, bool $isReferenceDumping): AiCriteriaInterface
+    private function getCriteria(CriteriaInterface $criteria, bool $isReferenceDumping): CriteriaInterface
     {
         if ($isReferenceDumping) {
-            return new AiCriteriaContainer($criteria);
+            return new CriteriaContainer($criteria);
         }
 
         return $criteria;
     }
 
     /**
-     * @param AiCriteriaInterface[] $default
+     * @param CriteriaInterface[] $default
      */
     public function createCriteriaNode(array $default, bool $isReferenceDumping): ArrayNodeDefinition
     {
         $nodeDefinition = new ArrayNodeDefinition('criteria');
         $nodeDefinition
             ->defaultValue(\array_map(
-                fn (AiCriteriaInterface $criteria) => $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
+                fn (CriteriaInterface $criteria) => $this->getCriteria(PrivacyCriteria::LOW, $isReferenceDumping),
                 $default,
             ));
         $nodeDefinition
@@ -306,7 +306,7 @@ class ModelflowAiBundle extends AbstractBundle
                 ->then(function ($value) use ($isReferenceDumping): array {
                     $result = [];
                     foreach ($value as $item) {
-                        if ($item instanceof AiCriteriaInterface) {
+                        if ($item instanceof CriteriaInterface) {
                             $result[] = $this->getCriteria($item, $isReferenceDumping);
                         } else {
                             $result[] = $item;
@@ -319,8 +319,8 @@ class ModelflowAiBundle extends AbstractBundle
         $nodeDefinition
             ->variablePrototype()
                 ->validate()
-                    ->ifTrue(static fn ($value): bool => !$value instanceof AiCriteriaInterface)
-                    ->thenInvalid('The value has to be an instance of AiCriteriaInterface')
+                    ->ifTrue(static fn ($value): bool => !$value instanceof CriteriaInterface)
+                    ->thenInvalid('The value has to be an instance of CriteriaInterface')
                 ->end()
             ->end();
 
@@ -533,14 +533,14 @@ class ModelflowAiBundle extends AbstractBundle
      *             credentials: array{
      *                 api_key: string
      *             },
-     *             criteria: AiCriteriaInterface[]
+     *             criteria: CriteriaInterface[]
      *         },
      *         mistral: array{
      *             enabled: bool,
      *             credentials: array{
      *                 api_key: string
      *             },
-     *             criteria: AiCriteriaInterface[]
+     *             criteria: CriteriaInterface[]
      *         },
      *         anthropic: array{
      *             enabled: bool,
@@ -548,12 +548,12 @@ class ModelflowAiBundle extends AbstractBundle
      *                 api_key: string
      *             },
      *             max_tokens: int,
-     *             criteria: AiCriteriaInterface[]
+     *             criteria: CriteriaInterface[]
      *         },
      *         ollama: array{
      *             enabled: bool,
      *             url: string,
-     *             criteria: AiCriteriaInterface[]
+     *             criteria: CriteriaInterface[]
      *         }
      *     },
      *     adapters?: array<string, array{
@@ -567,7 +567,7 @@ class ModelflowAiBundle extends AbstractBundle
      *         tools: bool,
      *         image_to_text: bool,
      *         text_to_image: bool,
-     *         criteria: AiCriteriaInterface[]
+     *         criteria: CriteriaInterface[]
      *     }>,
      *     embeddings?: array{
      *         generators: array<string, array{
@@ -588,7 +588,7 @@ class ModelflowAiBundle extends AbstractBundle
      *         name: string,
      *         description: string,
      *         instructions: string,
-     *         criteria: AiCriteriaInterface[],
+     *         criteria: CriteriaInterface[],
      *         response_format?: array{
      *             type: string,
      *             schema: mixed

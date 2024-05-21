@@ -15,21 +15,21 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ModelflowAi\Core\AIRequestHandler;
 use ModelflowAi\Core\AIRequestHandlerInterface;
-use ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface;
 use ModelflowAi\Core\ToolInfo\ToolExecutor;
 use ModelflowAi\Core\ToolInfo\ToolExecutorInterface;
-use ModelflowAi\Integration\Symfony\DecisionTree\AIModelDecisionTreeDecorator;
+use ModelflowAi\DecisionTree\DecisionTreeInterface;
+use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
 
 /*
  * @internal
  */
 return static function (ContainerConfigurator $container) {
     $container->services()
-        ->set('modelflow_ai.request_handler.decision_tree', AIModelDecisionTreeDecorator::class)
+        ->set('modelflow_ai.request_handler.decision_tree', DecisionTreeDecorator::class)
         ->args([
             tagged_iterator('modelflow_ai.decision_tree.rule'),
         ])
-        ->alias(AIModelDecisionTreeInterface::class, 'modelflow_ai.request_handler.decision_tree');
+        ->alias(DecisionTreeInterface::class, 'modelflow_ai.request_handler.decision_tree');
 
     $container->services()
         ->set('modelflow_ai.request_handler', AIRequestHandler::class)

@@ -33,41 +33,41 @@ services:
     modelflow_ai.chat_adapter.llama2.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.chat_adapter.llama2.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
     modelflow_ai.chat_adapter.llava.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.chat_adapter.llava.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
     modelflow_ai.chat_adapter.nexusraven.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.chat_adapter.nexusraven.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
     modelflow_ai.text_adapter.llama2.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.text_adapter.llama2.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
     modelflow_ai.text_adapter.llava.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.text_adapter.llava.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
     modelflow_ai.text_adapter.nexusraven.adapter:
         class: ModelflowAi\Core\Model\AIModelAdapterInterface
     modelflow_ai.text_adapter.nexusraven.rule:
-        class: ModelflowAi\Core\DecisionTree\DecisionRule
+        class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.decision_tree.rule" }
         
 aliases:
-    ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface: modelflow_ai.request_handler.decision_tree
+    ModelflowAi\DecisionTree\DecisionTreeInterface: modelflow_ai.request_handler.decision_tree
     ModelflowAi\Core\AIRequestHandlerInterface: modelflow_ai.request_handler
 ```

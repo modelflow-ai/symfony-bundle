@@ -13,24 +13,24 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony\DecisionTree;
 
-use ModelflowAi\Core\Behaviour\CriteriaBehaviour;
-use ModelflowAi\Core\Behaviour\SupportsBehaviour;
-use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
-use ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface;
-use ModelflowAi\Core\DecisionTree\DecisionRuleInterface;
+use ModelflowAi\DecisionTree\Behaviour\CriteriaBehaviour;
+use ModelflowAi\DecisionTree\Behaviour\SupportsBehaviour;
+use ModelflowAi\DecisionTree\DecisionRuleInterface;
+use ModelflowAi\DecisionTree\DecisionTree;
+use ModelflowAi\DecisionTree\DecisionTreeInterface;
 
 /**
  * @template T of CriteriaBehaviour
  * @template U of SupportsBehaviour
  *
- * @implements AIModelDecisionTreeInterface<T, U>
+ * @implements DecisionTreeInterface<T, U>
  */
-final readonly class AIModelDecisionTreeDecorator implements AIModelDecisionTreeInterface
+final readonly class DecisionTreeDecorator implements DecisionTreeInterface
 {
     /**
-     * @var AIModelDecisionTreeInterface<T, U>
+     * @var DecisionTreeInterface<T, U>
      */
-    private AIModelDecisionTreeInterface $inner;
+    private DecisionTreeInterface $inner;
 
     /**
      * @param \Traversable<DecisionRuleInterface<T, U>> $rules
@@ -38,7 +38,7 @@ final readonly class AIModelDecisionTreeDecorator implements AIModelDecisionTree
     public function __construct(
         \Traversable $rules,
     ) {
-        $this->inner = new AIModelDecisionTree(\iterator_to_array($rules));
+        $this->inner = new DecisionTree(\iterator_to_array($rules));
     }
 
     public function determineAdapter(object $request): object
