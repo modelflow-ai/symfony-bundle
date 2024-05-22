@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ModelflowAi\OllamaAdapter\OllamaAdapterFactory;
+use ModelflowAi\OllamaAdapter\OllamaCompletionAdapterFactory;
 
 /*
  * @internal
  */
 return static function (ContainerConfigurator $container) {
     $container->services()
-        ->set('modelflow_ai.providers.ollama.completion_adapter_factory', OllamaAdapterFactory::class)
+        ->set('modelflow_ai.providers.ollama.completion_adapter_factory', OllamaCompletionAdapterFactory::class)
         ->args([
             service('modelflow_ai.providers.ollama.client'),
         ]);

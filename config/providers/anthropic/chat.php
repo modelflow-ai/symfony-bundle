@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ModelflowAi\AnthropicAdapter\AnthropicAdapterFactory;
+use ModelflowAi\AnthropicAdapter\AnthropicChatAdapterFactory;
 
 /*
  * @internal
  */
 return static function (ContainerConfigurator $container) {
     $container->services()
-        ->set('modelflow_ai.providers.anthropic.chat_adapter_factory', AnthropicAdapterFactory::class)
+        ->set('modelflow_ai.providers.anthropic.chat_adapter_factory', AnthropicChatAdapterFactory::class)
         ->args([
             service('modelflow_ai.providers.anthropic.client'),
             '%modelflow_ai.providers.anthropic.max_tokens%',

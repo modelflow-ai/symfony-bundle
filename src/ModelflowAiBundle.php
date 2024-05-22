@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony;
 
-use ModelflowAi\AnthropicAdapter\AnthropicAdapterFactory;
-use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
+use ModelflowAi\AnthropicAdapter\AnthropicAdapterPackage;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
@@ -22,6 +21,7 @@ use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use ModelflowAi\DecisionTree\Criteria\CriteriaInterface;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
+use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
@@ -34,9 +34,9 @@ use ModelflowAi\Integration\Symfony\Config\CriteriaContainer;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
 use ModelflowAi\Mistral\Model;
-use ModelflowAi\MistralAdapter\MistralAdapterFactory;
-use ModelflowAi\OllamaAdapter\OllamaAdapterFactory;
-use ModelflowAi\OpenaiAdapter\OpenaiAdapterFactory;
+use ModelflowAi\MistralAdapter\MistralAdapterPackage;
+use ModelflowAi\OllamaAdapter\OllamaAdapterPackage;
+use ModelflowAi\OpenaiAdapter\OpenAiAdapterPackage;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -651,19 +651,19 @@ class ModelflowAiBundle extends AbstractBundle
             ->set('modelflow_ai.adapters', $adapters)
             ->set('modelflow_ai.providers', $providers);
 
-        if (($providers['openai']['enabled'] ?? false) && !\class_exists(OpenaiAdapterFactory::class)) {
+        if (($providers['openai']['enabled'] ?? false) && !\class_exists(OpenAiAdapterPackage::class)) {
             throw new \Exception('OpenAi adapter is enabled but the OpenAi adapter library is not installed. Please install it with composer require modelflow-ai/openai-adapter');
         }
 
-        if (($providers['mistral']['enabled'] ?? false) && !\class_exists(MistralAdapterFactory::class)) {
+        if (($providers['mistral']['enabled'] ?? false) && !\class_exists(MistralAdapterPackage::class)) {
             throw new \Exception('Mistral adapter is enabled but the Mistral adapter library is not installed. Please install it with composer require modelflow-ai/mistral-adapter');
         }
 
-        if (($providers['anthropic']['enabled'] ?? false) && !\class_exists(AnthropicAdapterFactory::class)) {
+        if (($providers['anthropic']['enabled'] ?? false) && !\class_exists(AnthropicAdapterPackage::class)) {
             throw new \Exception('Anthropic adapter is enabled but the Anthropic adapter library is not installed. Please install it with composer require modelflow-ai/anthropic-adapter');
         }
 
-        if (($providers['ollama']['enabled'] ?? false) && !\class_exists(OllamaAdapterFactory::class)) {
+        if (($providers['ollama']['enabled'] ?? false) && !\class_exists(OllamaAdapterPackage::class)) {
             throw new \Exception('Ollama adapter is enabled but the Ollama adapter library is not installed. Please install it with composer require modelflow-ai/ollama-adapter');
         }
 
