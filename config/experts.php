@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('modelflow_ai.experts.thread_factory', ThreadFactory::class)
         ->args([
-            service('modelflow_ai.request_handler'),
+            service('modelflow_ai.chat_request_handler'),
         ])
         ->alias(ThreadFactoryInterface::class, 'modelflow_ai.experts.thread_factory');
 };

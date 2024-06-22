@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace ModelflowAi\Integration\Symfony;
 
 use ModelflowAi\AnthropicAdapter\AnthropicAdapterPackage;
-use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
-use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
-use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
+use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
+use ModelflowAi\Chat\ChatPackage;
+use ModelflowAi\Completion\Adapter\AICompletionAdapterInterface;
+use ModelflowAi\Completion\CompletionPackage;
+use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\Criteria\CriteriaInterface;
+use ModelflowAi\DecisionTree\Criteria\FeatureCriteria;
+use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
@@ -51,6 +54,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ModelflowAiBundle extends AbstractBundle
 {
     final public const TAG_IMAGE_DECISION_TREE_RULE = 'modelflow_ai.image_request_handler.decision_tree.rule';
+    final public const TAG_CHAT_DECISION_TREE_RULE = 'modelflow_ai.chat_request_handler.decision_tree.rule';
+    final public const TAG_COMPLETION_DECISION_TREE_RULE = 'modelflow_ai.completion_request_handler.decision_tree.rule';
 
     protected string $extensionAlias = 'modelflow_ai';
 
@@ -604,7 +609,6 @@ class ModelflowAiBundle extends AbstractBundle
                 ->set('modelflow_ai.providers.' . $key, $value);
         }
 
-        $container->import(\dirname(__DIR__) . '/config/request_handler.php');
         $container->import(\dirname(__DIR__) . '/config/commands.php');
 
         $adapters = \array_filter($config['adapters'] ?? [], fn (array $adapter) => $adapter['enabled']);
@@ -643,6 +647,18 @@ class ModelflowAiBundle extends AbstractBundle
             throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
         }
 
+        if ([] !== $chatAdapters && !\class_exists(ChatPackage::class)) {
+            throw new \Exception(
+                'Chat adapters are enabled but the chat package is not installed. Please install it with composer require modelflow-ai/chat',
+            );
+        }
+
+        if ([] !== $completionAdapters && !\class_exists(CompletionPackage::class)) {
+            throw new \Exception(
+                'Completion adapters are enabled but the completion package is not installed. Please install it with composer require modelflow-ai/completion',
+            );
+        }
+
         if ([] !== $imageAdapters && !\class_exists(ImagePackage::class)) {
             throw new \Exception('Image adapters are enabled but the image adapter library is not installed. Please install it with composer require modelflow-ai/image');
         }
@@ -671,6 +687,8 @@ class ModelflowAiBundle extends AbstractBundle
             $container->import(\dirname(__DIR__) . '/config/providers/' . $configFile);
         }
 
+        $container->import(\dirname(__DIR__) . '/config/chat_request_handler.php');
+
         foreach ($chatAdapters as $key) {
             $adapter = $adapters[$key] ?? null;
             if (!$adapter) {
@@ -683,7 +701,7 @@ class ModelflowAiBundle extends AbstractBundle
             }
 
             $container->services()
-                ->set('modelflow_ai.chat_adapter.' . $key . '.adapter', AIModelAdapterInterface::class)
+                ->set('modelflow_ai.chat_adapter.' . $key . '.adapter', AIChatAdapterInterface::class)
                 ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.chat_adapter_factory'), 'createChatAdapter'])
                 ->args([
                     $adapter,
@@ -706,39 +724,45 @@ class ModelflowAiBundle extends AbstractBundle
                     service('modelflow_ai.chat_adapter.' . $key . '.adapter'),
                     \array_merge($provider['criteria'], $adapter['criteria'], $featureCriteria),
                 ])
-                ->tag('modelflow_ai.decision_tree.rule');
+                ->tag(self::TAG_CHAT_DECISION_TREE_RULE);
         }
+
+        $container->import(\dirname(__DIR__) . '/config/completion_request_handler.php');
 
         foreach ($completionAdapters as $key) {
             $adapter = $adapters[$key] ?? null;
             if (!$adapter) {
-                throw new \Exception('Text adapter ' . $key . ' is enabled but not configured.');
+                throw new \Exception('Completion adapter ' . $key . ' is enabled but not configured.');
             }
 
             $provider = $providers[$adapter['provider']] ?? null;
             if (!$provider) {
-                throw new \Exception('Text adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
+                throw new \Exception('Completion adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
             }
 
             $container->services()
-                ->set('modelflow_ai.text_adapter.' . $key . '.adapter', AIModelAdapterInterface::class)
+                ->set('modelflow_ai.completion_adapter.' . $key . '.adapter', AICompletionAdapterInterface::class)
                 ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.completion_adapter_factory'), 'createCompletionAdapter'])
                 ->args([
                     $adapter,
                 ]);
 
             $container->services()
-                ->set('modelflow_ai.text_adapter.' . $key . '.rule', DecisionRule::class)
+                ->set('modelflow_ai.completion_adapter.' . $key . '.rule', DecisionRule::class)
                 ->args([
-                    service('modelflow_ai.text_adapter.' . $key . '.adapter'),
+                    service('modelflow_ai.completion_adapter.' . $key . '.adapter'),
                     \array_merge($provider['criteria'], $adapter['criteria']),
                 ])
-                ->tag('modelflow_ai.decision_tree.rule');
+                ->tag(self::TAG_COMPLETION_DECISION_TREE_RULE);
         }
 
-        if ([] !== $imageAdapters) {
-            $container->import(\dirname(__DIR__) . '/config/image.php');
+        if ([] !== $imageAdapters && !\class_exists(ImagePackage::class)) {
+            throw new \Exception(
+                'Image adapters are enabled but the image package is not installed. Please install it with composer require modelflow-ai/image',
+            );
         }
+
+        $container->import(\dirname(__DIR__) . '/config/image_request_handler.php');
 
         foreach ($imageAdapters as $key) {
             $adapter = $adapters[$key] ?? null;

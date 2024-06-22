@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ModelflowAi\OpenaiAdapter\OpenaiChatAdapterFactory;
+use ModelflowAi\OpenaiAdapter\Chat\OpenaiChatAdapterFactory;
 
 /*
  * @internal

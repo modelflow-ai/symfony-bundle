@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('modelflow_ai.command.chat', ChatCommand::class)
         ->args([
-            service('modelflow_ai.request_handler'),
+            service('modelflow_ai.chat_request_handler'),
         ])
         ->tag('console.command', ['command' => 'modelflow-ai:chat']);
 };

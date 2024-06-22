@@ -78,7 +78,7 @@ class ModelflowAiBundleTest extends BundleTestCase
                     $name = $tag['name'];
                     $this->assertArrayHasKey($name, $definition->getTags());
                     $tagAttributes = $definition->getTag($name);
-                    $this->assertSame($expectedTagAttributes, $tagAttributes[0]);
+                    $this->assertSame($expectedTagAttributes, $tagAttributes[0], $id);
                 }
             }
         }

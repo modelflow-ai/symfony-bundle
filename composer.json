@@ -30,7 +30,6 @@
     ],
     "require": {
         "php": "^8.2",
-        "modelflow-ai/core": "^0.2",
         "symfony/console": "^6.2 | ^7.0",
         "symfony/dependency-injection": "^6.2 | ^7.0",
         "symfony/http-kernel": "^6.2 | ^7.0",
@@ -39,6 +38,8 @@
     },
     "require-dev": {
         "modelflow-ai/anthropic-adapter": "^0.2",
+        "modelflow-ai/chat": "^0.2",
+        "modelflow-ai/completion": "^0.2",
         "modelflow-ai/embeddings": "^0.2",
         "modelflow-ai/experts": "^0.2",
         "modelflow-ai/image": "^0.2",
@@ -53,9 +54,12 @@
         "phpunit/phpunit": "^10.3",
         "rector/rector": "^0.18.1",
         "symfony/yaml": "^6.2 | ^7.0",
-        "symfony/filesystem": "^6.2 | ^7.0"
+        "symfony/filesystem": "^6.2 | ^7.0",
+        "asapo/remove-vendor-plugin": "^0.1"
     },
     "suggest": {
+        "modelflow-ai/chat": "Library to handle chat requests.",
+        "modelflow-ai/completion": "Library to handle completion requests.",
         "modelflow-ai/embeddings": "Library to manage embeddings.",
         "modelflow-ai/experts": "Library that provide experts.",
         "modelflow-ai/image": "Library to generate and manipulate images.",
@@ -92,7 +96,7 @@
             "type": "path",
             "url": "./../../packages/*",
             "options": {
-                "symlink": true
+                "symlink": false
             }
         }
     ],
@@ -100,7 +104,13 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "asapo/remove-vendor-plugin": true
         }
+    },
+    "extra": {
+        "remove-folders": [
+            "modelflow-ai/*/vendor"
+        ]
     }
 }

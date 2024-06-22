@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $container) {
         ->args([
             tagged_iterator(ModelflowAiBundle::TAG_IMAGE_DECISION_TREE_RULE),
         ])
-        ->alias(DecisionTreeInterface::class, 'modelflow_ai.request_handler.decision_tree');
+        ->alias(DecisionTreeInterface::class, 'modelflow_ai.chat_request_handler.decision_tree');
 
     $container->services()
         ->set('modelflow_ai.image_request_handler.middleware.handle', HandleMiddleware::class)

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Integration\Symfony\Command;
 
-use ModelflowAi\Core\AIRequestHandlerInterface;
-use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
-use ModelflowAi\Core\Request\Message\AIChatMessage;
-use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Chat\AIChatRequestHandlerInterface;
+use ModelflowAi\Chat\Request\Message\AIChatMessage;
+use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
 use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ChatCommand extends Command
 {
     public function __construct(
-        private readonly AIRequestHandlerInterface $requestHandler,
+        private readonly AIChatRequestHandlerInterface $requestHandler,
     ) {
         parent::__construct();
     }
@@ -34,7 +34,7 @@ final class ChatCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var AIChatResponse $response */
-        $response = $this->requestHandler->createChatRequest(...ChatPromptTemplate::create(
+        $response = $this->requestHandler->createRequest(...ChatPromptTemplate::create(
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
         )->format(['where' => 'world', 'feeling' => 'angry']))

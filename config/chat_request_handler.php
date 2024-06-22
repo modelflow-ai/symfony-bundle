@@ -13,30 +13,29 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use ModelflowAi\Core\AIRequestHandler;
-use ModelflowAi\Core\AIRequestHandlerInterface;
-use ModelflowAi\Core\ToolInfo\ToolExecutor;
-use ModelflowAi\Core\ToolInfo\ToolExecutorInterface;
-use ModelflowAi\DecisionTree\DecisionTreeInterface;
+use ModelflowAi\Chat\AIChatRequestHandler;
+use ModelflowAi\Chat\AIChatRequestHandlerInterface;
+use ModelflowAi\Chat\ToolInfo\ToolExecutor;
+use ModelflowAi\Chat\ToolInfo\ToolExecutorInterface;
 use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
+use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
 
 /*
  * @internal
  */
 return static function (ContainerConfigurator $container) {
     $container->services()
-        ->set('modelflow_ai.request_handler.decision_tree', DecisionTreeDecorator::class)
+        ->set('modelflow_ai.chat_request_handler.decision_tree', DecisionTreeDecorator::class)
         ->args([
-            tagged_iterator('modelflow_ai.decision_tree.rule'),
-        ])
-        ->alias(DecisionTreeInterface::class, 'modelflow_ai.request_handler.decision_tree');
+            tagged_iterator(ModelflowAiBundle::TAG_CHAT_DECISION_TREE_RULE),
+        ]);
 
     $container->services()
-        ->set('modelflow_ai.request_handler', AIRequestHandler::class)
+        ->set('modelflow_ai.chat_request_handler', AIChatRequestHandler::class)
         ->args([
-            service('modelflow_ai.request_handler.decision_tree'),
+            service('modelflow_ai.chat_request_handler.decision_tree'),
         ])
-        ->alias(AIRequestHandlerInterface::class, 'modelflow_ai.request_handler');
+        ->alias(AIChatRequestHandlerInterface::class, 'modelflow_ai.chat_request_handler');
 
     $container->services()
         ->set('modelflow_ai.tool_executor', ToolExecutor::class)
