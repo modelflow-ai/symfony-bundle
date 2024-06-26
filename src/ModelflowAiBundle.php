@@ -658,24 +658,20 @@ class ModelflowAiBundle extends AbstractBundle
             $configFiles[] = $generator['provider'] . '/embeddings.php';
         }
 
-        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
-            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
-        }
-
         if ([] !== $chatAdapters && !\class_exists(ChatPackage::class)) {
-            throw new \Exception(
-                'Chat adapters are enabled but the chat package is not installed. Please install it with composer require modelflow-ai/chat',
-            );
+            $chatAdapters = [];
         }
 
         if ([] !== $completionAdapters && !\class_exists(CompletionPackage::class)) {
-            throw new \Exception(
-                'Completion adapters are enabled but the completion package is not installed. Please install it with composer require modelflow-ai/completion',
-            );
+            $completionAdapters = [];
         }
 
         if ([] !== $imageAdapters && !\class_exists(ImagePackage::class)) {
-            throw new \Exception('Image adapters are enabled but the image adapter library is not installed. Please install it with composer require modelflow-ai/image');
+            $imageAdapters = [];
+        }
+
+        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
+            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
         }
 
         $container->parameters()
