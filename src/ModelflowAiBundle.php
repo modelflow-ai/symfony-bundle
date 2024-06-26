@@ -238,6 +238,21 @@ class ModelflowAiBundle extends AbstractBundle
                 CapabilityCriteria::BASIC,
             ],
         ],
+        'claude_3_5_sonnet' => [
+            'provider' => ProviderCriteria::ANTHROPIC->value,
+            'model' => ModelCriteria::CLAUDE_3_5_SONNET->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::CLAUDE_3_5_SONNET,
+                ProviderCriteria::ANTHROPIC,
+                CapabilityCriteria::SMART,
+            ],
+        ],
         'claude_3_opus' => [
             'provider' => ProviderCriteria::ANTHROPIC->value,
             'model' => ModelCriteria::CLAUDE_3_OPUS->value,
