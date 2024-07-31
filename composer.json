@@ -8,9 +8,13 @@
         "openai",
         "mistral",
         "ollama",
+        "anthropic",
+        "fireworksai",
         "gpt4",
         "gpt3.5",
-        "llama2"
+        "llama2",
+        "llama3.1",
+        "mistral-large"
     ],
     "autoload": {
         "psr-4": {
@@ -42,6 +46,7 @@
         "modelflow-ai/completion": "^0.2",
         "modelflow-ai/embeddings": "^0.2",
         "modelflow-ai/experts": "^0.2",
+        "modelflow-ai/fireworksai-adapter": "^0.2",
         "modelflow-ai/image": "^0.2",
         "modelflow-ai/mistral-adapter": "^0.2",
         "modelflow-ai/ollama-adapter": "^0.2",
@@ -62,6 +67,7 @@
         "modelflow-ai/completion": "Library to handle completion requests.",
         "modelflow-ai/embeddings": "Library to manage embeddings.",
         "modelflow-ai/experts": "Library that provide experts.",
+        "modelflow-ai/fireworksai-adapter": "Adapter to interact with fireworksai models.",
         "modelflow-ai/image": "Library to generate and manipulate images.",
         "modelflow-ai/anthropic-adapter": "Adapter to interact with anthropic models.",
         "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",

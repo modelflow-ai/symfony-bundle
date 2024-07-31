@@ -22,6 +22,7 @@ enum ModelCriteria: string implements CriteriaInterface
 
     // Ollama
     case LLAMA2 = 'llama2';
+    case LLAMA3 = 'llama3';
     case NEXUSRAVEN = 'nexusraven';
     case LLAVA = 'llava';
 
@@ -42,4 +43,14 @@ enum ModelCriteria: string implements CriteriaInterface
     case CLAUDE_3_5_SONNET = 'claude-3-5-sonnet-20240620';
     case CLAUDE_3_SONNET = 'claude-3-sonnet-20240229';
     case CLAUDE_3_HAIKU = 'claude-3-haiku-20240307';
+
+    // FireworksAI
+    case LLAMA3_1_405B_FIREWORKS = 'accounts/fireworks/models/llama-v3p1-405b-instruct';
+    case LLAMA3_1_70B_FIREWORKS = 'accounts/fireworks/models/llama-v3p1-70b-instruct';
+    case LLAMA3_1_8B_FIREWORKS = 'accounts/fireworks/models/llama-v3p1-8b-instruct';
+    case LLAMA3_70B_FIREWORKS = 'accounts/fireworks/models/llama-v3-70b-instruct';
+    case FIREFUNCTION_V2_FIREWORKS = 'accounts/fireworks/models/firefunction-v2';
+    case MIXTRAL_FIREWORKS = 'accounts/fireworks/models/mixtral-8x22b-instruct';
+    case LLAVA_13B_FIREWORKS = 'accounts/fireworks/models/firellava-13b';
+    case STABLE_DIFFUSSION_XL_1024_FIREWORKS = 'stable-diffusion-xl-1024-v1-0';
 }

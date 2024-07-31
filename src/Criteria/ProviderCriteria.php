@@ -24,4 +24,5 @@ enum ProviderCriteria: string implements CriteriaInterface
     case OPENAI = 'openai';
     case MISTRAL = 'mistral';
     case ANTHROPIC = 'anthropic';
+    case FIREWORKSAI = 'fireworksai';
 }

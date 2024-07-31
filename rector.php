@@ -17,6 +17,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->skip([
             __DIR__ . '/config/providers/anthropic/common.php',
+            __DIR__ . '/config/providers/fireworksai/common.php',
             __DIR__ . '/config/providers/mistral/common.php',
             __DIR__ . '/config/providers/ollama/common.php',
             __DIR__ . '/config/providers/openai/common.php',

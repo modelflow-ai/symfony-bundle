@@ -208,6 +208,21 @@ class ModelflowAiBundle extends AbstractBundle
                 CapabilityCriteria::BASIC,
             ],
         ],
+        'llama3' => [
+            'provider' => ProviderCriteria::OLLAMA->value,
+            'model' => ModelCriteria::LLAMA3->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA2,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
         'nexusraven' => [
             'provider' => ProviderCriteria::OLLAMA->value,
             'model' => ModelCriteria::NEXUSRAVEN->value,
@@ -295,6 +310,126 @@ class ModelflowAiBundle extends AbstractBundle
             'criteria' => [
                 ModelCriteria::CLAUDE_3_HAIKU,
                 ProviderCriteria::ANTHROPIC,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
+        'fireworksai_llama3_1_405b' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::LLAMA3_1_405B_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA3_1_405B_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::SMART,
+            ],
+        ],
+        'fireworksai_llama3_1_70b' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::LLAMA3_1_70B_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA3_1_70B_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
+        'fireworksai_llama3_1_8b' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::LLAMA3_1_8B_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA3_1_8B_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
+        'fireworksai_llama3_70b' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::LLAMA3_70B_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA3_70B_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
+        'fireworksai_mixtral' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::MIXTRAL_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::MIXTRAL_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::ADVANCED,
+            ],
+        ],
+        'fireworksai_firefunction_v2' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::FIREFUNCTION_V2_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => true,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::FIREFUNCTION_V2_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
+        'fireworksai_llava_13b' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::LLAVA_13B_FIREWORKS->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAVA_13B_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
+        'stable_diffusion_xl_fireworks' => [
+            'provider' => ProviderCriteria::FIREWORKSAI->value,
+            'model' => ModelCriteria::STABLE_DIFFUSSION_XL_1024_FIREWORKS->value,
+            'chat' => false,
+            'completion' => false,
+            'stream' => false,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => true,
+            'criteria' => [
+                ModelCriteria::STABLE_DIFFUSSION_XL_1024_FIREWORKS,
+                ProviderCriteria::FIREWORKSAI,
                 CapabilityCriteria::BASIC,
             ],
         ],
@@ -394,6 +529,19 @@ class ModelflowAiBundle extends AbstractBundle
                             ->end()
                         ->end()
                         ->arrayNode('anthropic')
+                            ->children()
+                                ->booleanNode('enabled')->defaultFalse()->end()
+                                ->arrayNode('credentials')
+                                    ->isRequired()
+                                    ->children()
+                                        ->scalarNode('api_key')->isRequired()->end()
+                                    ->end()
+                                ->end()
+                                ->integerNode('max_tokens')->defaultValue(1024)->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::LOW], $isReferenceDumping))
+                            ->end()
+                        ->end()
+                        ->arrayNode('fireworksai')
                             ->children()
                                 ->booleanNode('enabled')->defaultFalse()->end()
                                 ->arrayNode('credentials')
@@ -563,6 +711,14 @@ class ModelflowAiBundle extends AbstractBundle
      *             criteria: CriteriaInterface[]
      *         },
      *         anthropic: array{
+     *             enabled: bool,
+     *             credentials: array{
+     *                 api_key: string
+     *             },
+     *             max_tokens: int,
+     *             criteria: CriteriaInterface[]
+     *         },
+     *         fireworksai: array{
      *             enabled: bool,
      *             credentials: array{
      *                 api_key: string
