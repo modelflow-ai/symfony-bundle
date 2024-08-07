@@ -571,6 +571,16 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->append($this->createCriteriaNode([PrivacyCriteria::HIGH], $isReferenceDumping))
                             ->end()
                         ->end()
+                        ->arrayNode('custom')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('chat_factory')->end()
+                                    ->scalarNode('completion_factory')->end()
+                                    ->scalarNode('image_factory')->end()
+                                    ->append($this->createCriteriaNode([], $isReferenceDumping))
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('adapters')
@@ -730,7 +740,13 @@ class ModelflowAiBundle extends AbstractBundle
      *             enabled: bool,
      *             url: string,
      *             criteria: CriteriaInterface[]
-     *         }
+     *         },
+     *         custom?: array<array{
+     *             chat_factory?: string,
+     *             completion_factory?: string,
+     *             image_factory?: string,
+     *             criteria: CriteriaInterface[]
+     *         }>
      *     },
      *     adapters?: array<string, array{
      *         enabled: bool,
@@ -782,8 +798,12 @@ class ModelflowAiBundle extends AbstractBundle
 
         $container->import(\dirname(__DIR__) . '/config/commands.php');
 
+        $providers = $config['providers'] ?? [];
+        $customProviders = $providers['custom'] ?? [];
+        unset($providers['custom']);
+
         $adapters = \array_filter($config['adapters'] ?? [], fn (array $adapter) => $adapter['enabled']);
-        $providers = \array_filter($config['providers'] ?? [], fn (array $provider) => $provider['enabled']);
+        $providers = \array_filter($providers, fn (array $provider) => $provider['enabled']);
 
         $generators = $config['embeddings']['generators'] ?? [];
 
@@ -792,21 +812,26 @@ class ModelflowAiBundle extends AbstractBundle
         $imageAdapters = [];
         $configFiles = [];
         foreach ($adapters as $key => $adapter) {
-            $configFiles[] = $adapter['provider'] . '/common.php';
+            $tmpConfigFiles[] = $adapter['provider'] . '/common.php';
+            $isCustomProvider = \array_key_exists($adapter['provider'], $customProviders);
 
             if ($adapter['chat']) {
                 $chatAdapters[] = $key;
-                $configFiles[] = $adapter['provider'] . '/chat.php';
+                $tmpConfigFiles[] = $adapter['provider'] . '/chat.php';
             }
 
             if ($adapter['completion']) {
                 $completionAdapters[] = $key;
-                $configFiles[] = $adapter['provider'] . '/completion.php';
+                $tmpConfigFiles[] = $adapter['provider'] . '/completion.php';
             }
 
             if ($adapter['text_to_image']) {
                 $imageAdapters[] = $key;
-                $configFiles[] = $adapter['provider'] . '/image.php';
+                $tmpConfigFiles[] = $adapter['provider'] . '/image.php';
+            }
+
+            if (!$isCustomProvider) {
+                $configFiles = \array_merge($configFiles, $tmpConfigFiles);
             }
         }
 
@@ -862,14 +887,17 @@ class ModelflowAiBundle extends AbstractBundle
                 throw new \Exception('Chat adapter ' . $key . ' is enabled but not configured.');
             }
 
-            $provider = $providers[$adapter['provider']] ?? null;
+            $provider = $providers[$adapter['provider']] ?? $customProviders[$adapter['provider']] ?? null;
             if (!$provider) {
                 throw new \Exception('Chat adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
             }
 
+            $factory = $customProviders[$adapter['provider']]['chat_factory']
+                ?? 'modelflow_ai.providers.' . $adapter['provider'] . '.chat_adapter_factory';
+
             $container->services()
                 ->set('modelflow_ai.chat_adapter.' . $key . '.adapter', AIChatAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.chat_adapter_factory'), 'createChatAdapter'])
+                ->factory([service($factory), 'createChatAdapter'])
                 ->args([
                     $adapter,
                 ]);
@@ -907,9 +935,12 @@ class ModelflowAiBundle extends AbstractBundle
                 throw new \Exception('Completion adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
             }
 
+            $factory = $customProviders[$adapter['provider']]['completion_factory']
+                ?? 'modelflow_ai.providers.' . $adapter['provider'] . '.completion_adapter_factory';
+
             $container->services()
                 ->set('modelflow_ai.completion_adapter.' . $key . '.adapter', AICompletionAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.completion_adapter_factory'), 'createCompletionAdapter'])
+                ->factory([service($factory), 'createCompletionAdapter'])
                 ->args([
                     $adapter,
                 ]);
@@ -942,9 +973,12 @@ class ModelflowAiBundle extends AbstractBundle
                 throw new \Exception('Image adapter ' . $key . ' is enabled but the provider ' . $adapter['provider'] . ' is not enabled.');
             }
 
+            $factory = $customProviders[$adapter['provider']]['image_factory']
+                ?? 'modelflow_ai.providers.' . $adapter['provider'] . '.image_adapter_factory';
+
             $container->services()
                 ->set('modelflow_ai.image_adapter.' . $key . '.adapter', AIImageAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $adapter['provider'] . '.image_adapter_factory'), 'createImageAdapter'])
+                ->factory([service($factory), 'createImageAdapter'])
                 ->args([
                     $adapter,
                 ]);
