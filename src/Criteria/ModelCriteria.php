@@ -27,16 +27,19 @@ enum ModelCriteria: string implements CriteriaInterface
     case LLAVA = 'llava';
 
     // OpenAI
+    case GPT4O = 'gpt4o';
+    case GPT4O_MINI = 'gpt4o-mini';
     case GPT4 = 'gpt4';
     case GPT3_5 = 'gpt3.5-turbo';
     case DALL_E_3 = 'dall-e-3';
     case DALL_E_2 = 'dall-e-2';
 
     // Mistral
-    case MISTRAL_TINY = 'mistral_tiny';
-    case MISTRAL_SMALL = 'mistral_small';
-    case MISTRAL_MEDIUM = 'mistral_medium';
-    case MISTRAL_LARGE = 'mistral_large';
+    case MISTRAL_TINY = 'mistral-tiny';
+    case MISTRAL_SMALL = 'mistral-small-latest';
+    case MISTRAL_MEDIUM = 'mistral-medium-latest';
+    case MISTRAL_LARGE = 'mistral-large-latest';
+    case MISTRAL_NEMO = 'open-mistral-nemo';
 
     // Anthropic
     case CLAUDE_3_OPUS = 'claude-3-opus-20240229';

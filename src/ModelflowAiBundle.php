@@ -73,6 +73,36 @@ class ModelflowAiBundle extends AbstractBundle
     ];
 
     final public const DEFAULT_VALUES = [
+        'gpt4o_mini' => [
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::GPT4O_MINI->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => true,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::GPT4O_MINI,
+                ProviderCriteria::OPENAI,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
+        'gpt4o' => [
+            'provider' => ProviderCriteria::OPENAI->value,
+            'model' => ModelCriteria::GPT4O->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => true,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::GPT4O_MINI,
+                ProviderCriteria::OPENAI,
+                CapabilityCriteria::SMART,
+            ],
+        ],
         'gpt4' => [
             'provider' => ProviderCriteria::OPENAI->value,
             'model' => ModelCriteria::GPT4->value,
@@ -135,7 +165,7 @@ class ModelflowAiBundle extends AbstractBundle
         ],
         'mistral_tiny' => [
             'provider' => ProviderCriteria::MISTRAL->value,
-            'model' => Model::TINY->value,
+            'model' => ModelCriteria::MISTRAL_TINY->value,
             'chat' => true,
             'completion' => false,
             'stream' => true,
@@ -150,7 +180,7 @@ class ModelflowAiBundle extends AbstractBundle
         ],
         'mistral_small' => [
             'provider' => ProviderCriteria::MISTRAL->value,
-            'model' => Model::SMALL->value,
+            'model' => ModelCriteria::MISTRAL_SMALL->value,
             'chat' => true,
             'completion' => false,
             'stream' => true,
@@ -165,7 +195,7 @@ class ModelflowAiBundle extends AbstractBundle
         ],
         'mistral_medium' => [
             'provider' => ProviderCriteria::MISTRAL->value,
-            'model' => Model::MEDIUM->value,
+            'model' => ModelCriteria::MISTRAL_MEDIUM->value,
             'chat' => true,
             'completion' => false,
             'stream' => true,
@@ -178,9 +208,24 @@ class ModelflowAiBundle extends AbstractBundle
                 CapabilityCriteria::ADVANCED,
             ],
         ],
+        'mistral_nemo' => [
+            'provider' => ProviderCriteria::MISTRAL->value,
+            'model' => ModelCriteria::MISTRAL_NEMO->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => true,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::MISTRAL_NEMO,
+                ProviderCriteria::MISTRAL,
+                CapabilityCriteria::INTERMEDIATE,
+            ],
+        ],
         'mistral_large' => [
             'provider' => ProviderCriteria::MISTRAL->value,
-            'model' => Model::LARGE->value,
+            'model' => ModelCriteria::MISTRAL_LARGE->value,
             'chat' => true,
             'completion' => false,
             'stream' => true,
