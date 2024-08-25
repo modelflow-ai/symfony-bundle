@@ -42,7 +42,7 @@ usage examples.
 ## Contributing
 
 Contributions are welcome. Please open an issue or submit a pull request in the main repository
-at [https://github.com/modelflow-ai/modelflow-ai](https://github.com/modelflow-ai/modelflow-ai).
+at [https://github.com/modelflow-ai/.github](https://github.com/modelflow-ai/.github).
 
 ## License
 
