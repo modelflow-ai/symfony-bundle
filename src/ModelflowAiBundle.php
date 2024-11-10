@@ -98,7 +98,7 @@ class ModelflowAiBundle extends AbstractBundle
             'image_to_text' => false,
             'text_to_image' => false,
             'criteria' => [
-                ModelCriteria::GPT4O_MINI,
+                ModelCriteria::GPT4O,
                 ProviderCriteria::OPENAI,
                 CapabilityCriteria::SMART,
             ],
