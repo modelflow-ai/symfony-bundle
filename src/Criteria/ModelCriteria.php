@@ -23,6 +23,7 @@ enum ModelCriteria: string implements CriteriaInterface
     // Ollama
     case LLAMA2 = 'llama2';
     case LLAMA3 = 'llama3';
+    case LLAMA3_2 = 'llama3.2';
     case NEXUSRAVEN = 'nexusraven';
     case LLAVA = 'llava';
 
@@ -43,8 +44,9 @@ enum ModelCriteria: string implements CriteriaInterface
 
     // Anthropic
     case CLAUDE_3_OPUS = 'claude-3-opus-20240229';
-    case CLAUDE_3_5_SONNET = 'claude-3-5-sonnet-20240620';
+    case CLAUDE_3_5_SONNET = 'claude-3-5-sonnet-20241022';
     case CLAUDE_3_SONNET = 'claude-3-sonnet-20240229';
+    case CLAUDE_3_5_HAIKU = 'claude-3-5-haiku-20241022';
     case CLAUDE_3_HAIKU = 'claude-3-haiku-20240307';
 
     // FireworksAI

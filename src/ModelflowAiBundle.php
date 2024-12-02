@@ -36,7 +36,6 @@ use ModelflowAi\Image\ImagePackage;
 use ModelflowAi\Integration\Symfony\Config\CriteriaContainer;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use ModelflowAi\Integration\Symfony\Criteria\ProviderCriteria;
-use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\MistralAdapterPackage;
 use ModelflowAi\OllamaAdapter\OllamaAdapterPackage;
 use ModelflowAi\OpenaiAdapter\OpenAiAdapterPackage;
@@ -263,7 +262,22 @@ class ModelflowAiBundle extends AbstractBundle
             'image_to_text' => false,
             'text_to_image' => false,
             'criteria' => [
-                ModelCriteria::LLAMA2,
+                ModelCriteria::LLAMA3,
+                ProviderCriteria::OLLAMA,
+                CapabilityCriteria::BASIC,
+            ],
+        ],
+        'llama3_2' => [
+            'provider' => ProviderCriteria::OLLAMA->value,
+            'model' => ModelCriteria::LLAMA3_2->value,
+            'chat' => true,
+            'completion' => true,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::LLAMA3_2,
                 ProviderCriteria::OLLAMA,
                 CapabilityCriteria::BASIC,
             ],
@@ -341,6 +355,21 @@ class ModelflowAiBundle extends AbstractBundle
                 ModelCriteria::CLAUDE_3_SONNET,
                 ProviderCriteria::ANTHROPIC,
                 CapabilityCriteria::ADVANCED,
+            ],
+        ],
+        'claude_3_5_haiku' => [
+            'provider' => ProviderCriteria::ANTHROPIC->value,
+            'model' => ModelCriteria::CLAUDE_3_5_HAIKU->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::CLAUDE_3_5_HAIKU,
+                ProviderCriteria::ANTHROPIC,
+                CapabilityCriteria::BASIC,
             ],
         ],
         'claude_3_haiku' => [
