@@ -1,7 +1,7 @@
 {
     "name": "modelflow-ai/symfony-bundle",
     "description": "An integration of modelflow-ai via a bundle into the Symfony Framework.",
-    "type": "library",
+    "type": "symfony-bundle",
     "license": "MIT",
     "keywords": [
         "ai",
