@@ -41,6 +41,7 @@ enum ModelCriteria: string implements CriteriaInterface
     case MISTRAL_MEDIUM = 'mistral-medium-latest';
     case MISTRAL_LARGE = 'mistral-large-latest';
     case MISTRAL_NEMO = 'open-mistral-nemo';
+    case PIXTRAL_LARGE = 'pixtral-large-latest';
 
     // Anthropic
     case CLAUDE_3_OPUS = 'claude-3-opus-20240229';

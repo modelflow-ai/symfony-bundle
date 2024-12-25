@@ -237,6 +237,21 @@ class ModelflowAiBundle extends AbstractBundle
                 CapabilityCriteria::SMART,
             ],
         ],
+        'pixtral_large' => [
+            'provider' => ProviderCriteria::MISTRAL->value,
+            'model' => ModelCriteria::PIXTRAL_LARGE->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::PIXTRAL_LARGE,
+                ProviderCriteria::MISTRAL,
+                CapabilityCriteria::SMART,
+            ],
+        ],
         'llama2' => [
             'provider' => ProviderCriteria::OLLAMA->value,
             'model' => ModelCriteria::LLAMA2->value,
