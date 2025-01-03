@@ -25,4 +25,5 @@ enum ProviderCriteria: string implements CriteriaInterface
     case MISTRAL = 'mistral';
     case ANTHROPIC = 'anthropic';
     case FIREWORKSAI = 'fireworksai';
+    case GOOGLE_GEMINI = 'google_gemini';
 }

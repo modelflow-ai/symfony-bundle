@@ -31,6 +31,8 @@ use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Experts\Expert;
 use ModelflowAi\Experts\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\FireworksAiAdapter\FireworksAiAdapterPackage;
+use ModelflowAi\GoogleGeminiAdapter\GoogleGeminiAdapterPackage;
 use ModelflowAi\Image\Adapter\AIImageAdapterInterface;
 use ModelflowAi\Image\ImagePackage;
 use ModelflowAi\Integration\Symfony\Config\CriteriaContainer;
@@ -522,6 +524,36 @@ class ModelflowAiBundle extends AbstractBundle
                 CapabilityCriteria::BASIC,
             ],
         ],
+        'gemini_1_5_pro' => [
+            'provider' => ProviderCriteria::GOOGLE_GEMINI->value,
+            'model' => ModelCriteria::GEMINI_1_5_PRO->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => false,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::GEMINI_1_5_PRO,
+                ProviderCriteria::GOOGLE_GEMINI,
+                CapabilityCriteria::SMART,
+            ],
+        ],
+        'gemini_1_5_flash' => [
+            'provider' => ProviderCriteria::GOOGLE_GEMINI->value,
+            'model' => ModelCriteria::GEMINI_1_5_FLASH->value,
+            'chat' => true,
+            'completion' => false,
+            'stream' => true,
+            'tools' => false,
+            'image_to_text' => true,
+            'text_to_image' => false,
+            'criteria' => [
+                ModelCriteria::GEMINI_1_5_FLASH,
+                ProviderCriteria::GOOGLE_GEMINI,
+                CapabilityCriteria::ADVANCED,
+            ],
+        ],
     ];
 
     private function getCriteria(CriteriaInterface $criteria, bool $isReferenceDumping): CriteriaInterface
@@ -640,6 +672,18 @@ class ModelflowAiBundle extends AbstractBundle
                                     ->end()
                                 ->end()
                                 ->integerNode('max_tokens')->defaultValue(1024)->end()
+                                ->append($this->createCriteriaNode([PrivacyCriteria::LOW], $isReferenceDumping))
+                            ->end()
+                        ->end()
+                        ->arrayNode('google_gemini')
+                            ->children()
+                                ->booleanNode('enabled')->defaultFalse()->end()
+                                ->arrayNode('credentials')
+                                    ->isRequired()
+                                    ->children()
+                                        ->scalarNode('api_key')->isRequired()->end()
+                                    ->end()
+                                ->end()
                                 ->append($this->createCriteriaNode([PrivacyCriteria::LOW], $isReferenceDumping))
                             ->end()
                         ->end()
@@ -825,6 +869,13 @@ class ModelflowAiBundle extends AbstractBundle
      *             max_tokens: int,
      *             criteria: CriteriaInterface[]
      *         },
+     *         google_gemini: array{
+     *             enabled: bool,
+     *             credentials: array{
+     *                 api_key: string
+     *             },
+     *             criteria: CriteriaInterface[]
+     *         },
      *         ollama: array{
      *             enabled: bool,
      *             url: string,
@@ -958,6 +1009,14 @@ class ModelflowAiBundle extends AbstractBundle
 
         if (($providers['anthropic']['enabled'] ?? false) && !\class_exists(AnthropicAdapterPackage::class)) {
             throw new \Exception('Anthropic adapter is enabled but the Anthropic adapter library is not installed. Please install it with composer require modelflow-ai/anthropic-adapter');
+        }
+
+        if (($providers['fireworksai']['enabled'] ?? false) && !\class_exists(FireworksAiAdapterPackage::class)) {
+            throw new \Exception('FireworksAI adapter is enabled but the FireworksAI adapter library is not installed. Please install it with composer require modelflow-ai/fireworksai-adapter');
+        }
+
+        if (($providers['google_gemini']['enabled'] ?? false) && !\class_exists(GoogleGeminiAdapterPackage::class)) {
+            throw new \Exception('Google Gemini adapter is enabled but the Google Gemini adapter library is not installed. Please install it with composer require modelflow-ai/google-gemini-adapter');
         }
 
         if (($providers['ollama']['enabled'] ?? false) && !\class_exists(OllamaAdapterPackage::class)) {

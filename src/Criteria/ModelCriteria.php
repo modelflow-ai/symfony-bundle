@@ -59,4 +59,8 @@ enum ModelCriteria: string implements CriteriaInterface
     case MIXTRAL_FIREWORKS = 'accounts/fireworks/models/mixtral-8x22b-instruct';
     case LLAVA_13B_FIREWORKS = 'accounts/fireworks/models/firellava-13b';
     case STABLE_DIFFUSSION_XL_1024_FIREWORKS = 'stable-diffusion-xl-1024-v1-0';
+
+    // Google Gemini
+    case GEMINI_1_5_PRO = 'gemini-pro';
+    case GEMINI_1_5_FLASH = 'gemini-1.5-flash';
 }

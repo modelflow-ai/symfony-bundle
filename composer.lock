@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "777187c295c9485db20b900097074b4f",
+    "content-hash": "b0fbd7794f560ab8e6c60b001abb0bf6",
     "packages": [
         {
             "name": "psr/cache",
@@ -1012,12 +1012,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "86dd50b11455bdeee991048f19efe26a18d6081b"
+                "reference": "ec2344cf77a48253bbca6939aa3d2477773ea63d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/86dd50b11455bdeee991048f19efe26a18d6081b",
-                "reference": "86dd50b11455bdeee991048f19efe26a18d6081b",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/ec2344cf77a48253bbca6939aa3d2477773ea63d",
+                "reference": "ec2344cf77a48253bbca6939aa3d2477773ea63d",
                 "shasum": ""
             },
             "require": {
@@ -1068,7 +1068,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-12T06:45:37+00:00"
+            "time": "2024-12-30T19:00:26+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -1228,12 +1228,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "9e485dd3094b0bcf2d9cd9f9b822ef7ebc0e5dbc"
+                "reference": "9d9d7eff1bf2ac11d2782e18bdf9efc28a3d2c08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9e485dd3094b0bcf2d9cd9f9b822ef7ebc0e5dbc",
-                "reference": "9e485dd3094b0bcf2d9cd9f9b822ef7ebc0e5dbc",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9d9d7eff1bf2ac11d2782e18bdf9efc28a3d2c08",
+                "reference": "9d9d7eff1bf2ac11d2782e18bdf9efc28a3d2c08",
                 "shasum": ""
             },
             "require": {
@@ -1298,7 +1298,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-14T10:46:23+00:00"
+            "time": "2024-12-30T19:00:26+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -2268,6 +2268,69 @@
             "time": "2024-06-21T20:10:06+00:00"
         },
         {
+            "name": "google-gemini-php/client",
+            "version": "1.0.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/google-gemini-php/client.git",
+                "reference": "6dca9a5e6a6de39b230fe4593a8d041efd02e34e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/google-gemini-php/client/zipball/6dca9a5e6a6de39b230fe4593a8d041efd02e34e",
+                "reference": "6dca9a5e6a6de39b230fe4593a8d041efd02e34e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1.0",
+                "php-http/discovery": "^1.19.2"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.8.1",
+                "guzzlehttp/psr7": "^2.6.2",
+                "laravel/pint": "^1.18.1",
+                "mockery/mockery": "^1.6.7",
+                "pestphp/pest": "^2.30",
+                "phpstan/phpstan": "^1.10"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Gemini.php"
+                ],
+                "psr-4": {
+                    "Gemini\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fatih AYDIN",
+                    "email": "aydinfatih52@gmail.com"
+                }
+            ],
+            "description": "Gemini API is a supercharged PHP API client that allows you to interact with the Gemini API",
+            "keywords": [
+                "Gemini",
+                "client",
+                "gemini-pro",
+                "language",
+                "natural",
+                "nlp",
+                "php",
+                "processing",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/google-gemini-php/client/issues",
+                "source": "https://github.com/google-gemini-php/client/tree/1.0.15"
+            },
+            "time": "2024-12-29T12:53:49+00:00"
+        },
+        {
             "name": "modelflow-ai/anthropic",
             "version": "0.2.x-dev",
             "dist": {
@@ -3193,6 +3256,110 @@
             }
         },
         {
+            "name": "modelflow-ai/google-gemini-adapter",
+            "version": "0.2.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "./../../packages/google-gemini-adapter",
+                "reference": "b12c729887d4a255ef4b9a8098660979d6027bb5"
+            },
+            "require": {
+                "google-gemini-php/client": "^1.0.14",
+                "nyholm/psr7": "^1.8",
+                "php": "^8.2",
+                "php-http/discovery": "^1.0",
+                "psr/http-client": "^1.0",
+                "psr/http-client-implementation": "^1.0"
+            },
+            "require-dev": {
+                "asapo/remove-vendor-plugin": "^0.1",
+                "jangregor/phpstan-prophecy": "^1.0",
+                "modelflow-ai/chat": "^0.2",
+                "modelflow-ai/prompt-template": "^0.2",
+                "php-cs-fixer/shim": "^3.15",
+                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.10, <1.10.55",
+                "phpstan/phpstan-phpunit": "^1.3@stable",
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.18.1",
+                "symfony/dotenv": "7.1.x-dev",
+                "symfony/http-client": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "remove-folders": [
+                    "modelflow-ai/*/vendor"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "ModelflowAi\\GoogleGeminiAdapter\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "ModelflowAi\\GoogleGeminiAdapter\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test-with-coverage": [
+                    "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml"
+                ],
+                "test": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "vendor/bin/phpunit"
+                ],
+                "phpstan": [
+                    "@php vendor/bin/phpstan analyze"
+                ],
+                "lint-rector": [
+                    "@php vendor/bin/rector process --dry-run"
+                ],
+                "lint-php-cs": [
+                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+                ],
+                "lint": [
+                    "@phpstan",
+                    "@lint-php-cs",
+                    "@lint-rector",
+                    "@lint-composer"
+                ],
+                "lint-composer": [
+                    "@composer validate --strict"
+                ],
+                "rector": [
+                    "@php vendor/bin/rector process"
+                ],
+                "php-cs-fix": [
+                    "@php vendor/bin/php-cs-fixer fix"
+                ],
+                "fix": [
+                    "@rector",
+                    "@php-cs-fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johannes Wachter",
+                    "email": "johannes@sulu.io"
+                }
+            ],
+            "description": "Integrates the google gemini into modelflow-ai.",
+            "keywords": [
+                "ai",
+                "google-gemini",
+                "modelflow-ai"
+            ],
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
             "name": "modelflow-ai/image",
             "version": "0.2.x-dev",
             "dist": {
@@ -3970,16 +4137,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.3.1",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b"
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/8eea230464783aa9671db8eea6f8c6ac5285794b",
-                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/447a020a1f875a434d62f2a401f53b82a396e494",
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494",
                 "shasum": ""
             },
             "require": {
@@ -4022,9 +4189,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.4.0"
             },
-            "time": "2024-10-08T18:51:32+00:00"
+            "time": "2024-12-30T11:07:19+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -4318,16 +4485,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.65.0",
+            "version": "v3.66.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "4983ec79b9dee926695ac324ea6e8d291935525d"
+                "reference": "6824b91b16d2e123afed9bf9c96ec283882346c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/4983ec79b9dee926695ac324ea6e8d291935525d",
-                "reference": "4983ec79b9dee926695ac324ea6e8d291935525d",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/6824b91b16d2e123afed9bf9c96ec283882346c9",
+                "reference": "6824b91b16d2e123afed9bf9c96ec283882346c9",
                 "shasum": ""
             },
             "require": {
@@ -4364,9 +4531,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.65.0"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.66.0"
             },
-            "time": "2024-11-25T00:39:41+00:00"
+            "time": "2024-12-29T13:46:48+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -6238,12 +6405,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "1897eaecde8f4508698040335fef9e9076fbf64e"
+                "reference": "2402f1a19e8d130dffc2bb8445c41fbed6c8568c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/1897eaecde8f4508698040335fef9e9076fbf64e",
-                "reference": "1897eaecde8f4508698040335fef9e9076fbf64e",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/2402f1a19e8d130dffc2bb8445c41fbed6c8568c",
+                "reference": "2402f1a19e8d130dffc2bb8445c41fbed6c8568c",
                 "shasum": ""
             },
             "require": {
@@ -6325,7 +6492,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-12T06:45:37+00:00"
+            "time": "2024-12-30T18:35:27+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -6571,12 +6738,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/type-info.git",
-                "reference": "73b998e2af1e47ad6a564559dfa2c74600331379"
+                "reference": "5df4a48b3fde91b10db62d6ffddbd705c1d58765"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/type-info/zipball/73b998e2af1e47ad6a564559dfa2c74600331379",
-                "reference": "73b998e2af1e47ad6a564559dfa2c74600331379",
+                "url": "https://api.github.com/repos/symfony/type-info/zipball/5df4a48b3fde91b10db62d6ffddbd705c1d58765",
+                "reference": "5df4a48b3fde91b10db62d6ffddbd705c1d58765",
                 "shasum": ""
             },
             "require": {
@@ -6622,7 +6789,7 @@
                 "type"
             ],
             "support": {
-                "source": "https://github.com/symfony/type-info/tree/7.2"
+                "source": "https://github.com/symfony/type-info/tree/7.3"
             },
             "funding": [
                 {
@@ -6638,7 +6805,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-11T15:34:14+00:00"
+            "time": "2024-12-30T18:35:27+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -6646,12 +6813,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "7a9c072bdb56cd0c3e95993f67abc3dc923dc267"
+                "reference": "f5fa82bee4c3dfbe96612b488713e5129687e9d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/7a9c072bdb56cd0c3e95993f67abc3dc923dc267",
-                "reference": "7a9c072bdb56cd0c3e95993f67abc3dc923dc267",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f5fa82bee4c3dfbe96612b488713e5129687e9d0",
+                "reference": "f5fa82bee4c3dfbe96612b488713e5129687e9d0",
                 "shasum": ""
             },
             "require": {
@@ -6710,7 +6877,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-14T16:08:18+00:00"
+            "time": "2024-12-29T21:06:05+00:00"
         },
         {
             "name": "theseer/tokenizer",
