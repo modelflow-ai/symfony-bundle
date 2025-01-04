@@ -81,7 +81,7 @@ class ModelflowAiBundle extends AbstractBundle
             'completion' => false,
             'stream' => true,
             'tools' => true,
-            'image_to_text' => false,
+            'image_to_text' => true,
             'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::GPT4O_MINI,
@@ -96,7 +96,7 @@ class ModelflowAiBundle extends AbstractBundle
             'completion' => false,
             'stream' => true,
             'tools' => true,
-            'image_to_text' => false,
+            'image_to_text' => true,
             'text_to_image' => false,
             'criteria' => [
                 ModelCriteria::GPT4O,
