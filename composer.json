@@ -63,7 +63,8 @@
         "rector/rector": "^0.18.1",
         "symfony/yaml": "^6.2 | ^7.0",
         "symfony/filesystem": "^6.2 | ^7.0",
-        "asapo/remove-vendor-plugin": "^0.1"
+        "asapo/remove-vendor-plugin": "^0.1",
+        "symfony/json-encoder": "7.3.x-dev"
     },
     "suggest": {
         "modelflow-ai/chat": "Library to handle chat requests.",
