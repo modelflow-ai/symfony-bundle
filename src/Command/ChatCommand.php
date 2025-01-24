@@ -16,34 +16,47 @@ namespace ModelflowAi\Integration\Symfony\Command;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Chat\Response\AIChatResponse;
-use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
-use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ChatCommand extends Command
 {
     public function __construct(
-        private readonly AIChatRequestHandlerInterface $requestHandler,
+        private readonly AIChatRequestHandlerInterface $chatRequestHandler,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var AIChatResponse $response */
-        $response = $this->requestHandler->createRequest(...ChatPromptTemplate::create(
-            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
-            new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
-        )->format(['where' => 'world', 'feeling' => 'angry']))
-            ->addCriteria(PrivacyCriteria::HIGH)
-            ->build()
-            ->execute();
+        $io = new SymfonyStyle($input, $output);
 
-        $output->writeln($response->getMessage()->content);
+        $messages = [];
 
-        return 0;
+        while (true) {
+            /** @var string $question */
+            $question = $io->ask('You (close with "exit"): ');
+            if ('exit' === $question) {
+                break;
+            }
+
+            $response = $this->chatRequestHandler
+                ->createStreamedRequest(...$messages)
+                ->addUserMessage($question)
+                ->execute();
+
+            foreach ($response->getMessageStream() as $message) {
+                $io->write($message->content);
+            }
+
+            $io->newLine(2);
+
+            $messages = $response->getRequest()->getMessages();
+            $messages[] = new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, $response->getMessage()->content);
+        }
+
+        return Command::SUCCESS;
     }
 }
