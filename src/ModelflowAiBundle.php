@@ -30,6 +30,7 @@ use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Experts\Expert;
 use ModelflowAi\FireworksAiAdapter\FireworksAiAdapterPackage;
 use ModelflowAi\GoogleGeminiAdapter\GoogleGeminiAdapterPackage;
@@ -578,26 +579,26 @@ class ModelflowAiBundle extends AbstractBundle
             ));
         $nodeDefinition
             ->beforeNormalization()
-                ->ifArray()
-                ->then(function ($value) use ($isReferenceDumping): array {
-                    $result = [];
-                    foreach ($value as $item) {
-                        if ($item instanceof CriteriaInterface) {
-                            $result[] = $this->getCriteria($item, $isReferenceDumping);
-                        } else {
-                            $result[] = $item;
-                        }
+            ->ifArray()
+            ->then(function ($value) use ($isReferenceDumping): array {
+                $result = [];
+                foreach ($value as $item) {
+                    if ($item instanceof CriteriaInterface) {
+                        $result[] = $this->getCriteria($item, $isReferenceDumping);
+                    } else {
+                        $result[] = $item;
                     }
+                }
 
-                    return $result;
-                })
+                return $result;
+            })
             ->end();
         $nodeDefinition
             ->variablePrototype()
-                ->validate()
-                    ->ifTrue(static fn ($value): bool => !$value instanceof CriteriaInterface)
-                    ->thenInvalid('The value has to be an instance of CriteriaInterface')
-                ->end()
+            ->validate()
+            ->ifTrue(static fn ($value): bool => !$value instanceof CriteriaInterface)
+            ->thenInvalid('The value has to be an instance of CriteriaInterface')
+            ->end()
             ->end();
 
         return $nodeDefinition;
@@ -781,6 +782,10 @@ class ModelflowAiBundle extends AbstractBundle
                                     ->arrayNode('splitter')
                                         ->addDefaultsIfNotSet()
                                         ->children()
+                                            ->enumNode('type')->values(['default', 'service'])->defaultValue('default')->end()
+                                            ->scalarNode('service_id')
+                                                ->info('Service ID of the EmbeddingSplitterInterface implementation')
+                                            ->end()
                                             ->integerNode('max_length')->defaultValue(1000)->end()
                                             ->scalarNode('separator')->defaultValue(' ')->end()
                                         ->end()
@@ -794,6 +799,21 @@ class ModelflowAiBundle extends AbstractBundle
                                 ->end()
                             ->end()
                         ->end()
+                        ->arrayNode('stores')
+                            ->arrayPrototype()
+                                ->beforeNormalization()
+                                    ->ifString()
+                                    ->then(fn (string $dsn) => [
+                                        'enabled' => true,
+                                        'dsn' => $dsn,
+                                    ])
+                                ->end()
+                                ->children()
+                                    ->booleanNode('enabled')->defaultTrue()->end()
+                                    ->scalarNode('dsn')->end()
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('experts')
@@ -802,7 +822,7 @@ class ModelflowAiBundle extends AbstractBundle
                     ->arrayPrototype()
                         ->children()
                             ->scalarNode('name')->isRequired()->end()
-                            ->scalarNode('description')->isRequired()->end()
+                            ->scalarNode('description')->defaultValue('')->end()
                             ->scalarNode('instructions')->isRequired()->end()
                             ->arrayNode('response_format')
                                 ->children()
@@ -814,7 +834,8 @@ class ModelflowAiBundle extends AbstractBundle
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ->end();
     }
 
     /**
@@ -907,6 +928,8 @@ class ModelflowAiBundle extends AbstractBundle
      *             provider: string,
      *             model: string,
      *             splitter: array{
+     *                 type: "default"|"service",
+     *                 service_id?: string,
      *                 max_length: int,
      *                 separator: string
      *             },
@@ -914,7 +937,11 @@ class ModelflowAiBundle extends AbstractBundle
      *                 enabled: bool,
      *                 cache_pool: string
      *             }
-     *         }>
+     *         }>,
+     *         stores: array<string, array{
+     *             enabled: bool,
+     *             dsn: string,
+     *         }>,
      *     },
      *     experts?: array<array{
      *         name: string,
@@ -976,6 +1003,7 @@ class ModelflowAiBundle extends AbstractBundle
         }
 
         foreach ($generators as $generator) {
+            $configFiles[] = $generator['provider'] . '/common.php';
             $configFiles[] = $generator['provider'] . '/embeddings.php';
         }
 
@@ -1140,11 +1168,14 @@ class ModelflowAiBundle extends AbstractBundle
                 ->tag(self::TAG_IMAGE_DECISION_TREE_RULE);
         }
 
+        $container->import(\dirname(__DIR__) . '/config/embeddings.php');
+
         foreach ($generators as $key => $embedding) {
-            $adapterId = $key . '.adapter';
+            $prefix = 'modelflow_ai.embeddings.' . $key;
+            $adapterId = $prefix . '.adapter';
             $container->services()
                 ->set($adapterId, EmbeddingAdapterInterface::class)
-                ->factory([service('modelflow_ai.providers.' . $embedding['provider'] . '.embedding_adapter_factory'), 'createEmbeddingGenerator'])
+                ->factory([service('modelflow_ai.providers.' . $embedding['provider'] . '.embedding_adapter_factory'), 'createEmbeddingAdapter'])
                 ->args([
                     $embedding,
                 ]);
@@ -1160,22 +1191,38 @@ class ModelflowAiBundle extends AbstractBundle
                 $adapterId .= '.cache';
             }
 
-            $container->services()
-                ->set($key . '.splitter', EmbeddingSplitter::class)
-                ->args([
-                    $embedding['splitter']['max_length'],
-                    $embedding['splitter']['separator'],
-                ]);
+            if ('service' === $embedding['splitter']['type']) {
+                if (!isset($embedding['splitter']['service_id'])) {
+                    throw new \Exception('Embedding splitter service ID is not set');
+                }
+                $container->services()->alias($prefix . '.splitter', $embedding['splitter']['service_id']);
+            } else {
+                $container->services()
+                    ->set($prefix . '.splitter', EmbeddingSplitter::class)
+                    ->args([
+                        $embedding['splitter']['max_length'],
+                        $embedding['splitter']['separator'],
+                    ]);
+            }
 
             $container->services()
-                ->set($key . '.formatter', EmbeddingFormatter::class);
+                ->set($prefix . '.formatter', EmbeddingFormatter::class);
 
             $container->services()
-                ->set($key . '.generator', EmbeddingGenerator::class)
+                ->set($prefix . '.generator', EmbeddingGenerator::class)
                 ->args([
-                    service($key . '.splitter'),
-                    service($key . '.formatter'),
+                    service($prefix . '.splitter'),
+                    service($prefix . '.formatter'),
                     service($adapterId),
+                ]);
+        }
+
+        foreach ($config['embeddings']['stores'] ?? [] as $key => $store) {
+            $container->services()
+                ->set('modelflow_ai.embeddings.store.' . $key, EmbeddingsStoreInterface::class)
+                ->factory([service('modelflow_ai.embeddings_store_factory'), 'create'])
+                ->args([
+                    $store['dsn'],
                 ]);
         }
 

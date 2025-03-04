@@ -55,6 +55,7 @@
         "modelflow-ai/ollama-adapter": "^0.4",
         "modelflow-ai/openai-adapter": "^0.4",
         "modelflow-ai/prompt-template": "^0.4",
+        "modelflow-ai/qdrant-embeddings-store": "^0.4",
         "php-cs-fixer/shim": "^3.15",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.10, <1.10.55",
@@ -77,7 +78,8 @@
         "modelflow-ai/anthropic-adapter": "Adapter to interact with anthropic models.",
         "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",
         "modelflow-ai/ollama-adapter": "Adapter to interact with ollama models.",
-        "modelflow-ai/openai-adapter": "Adapter to interact with openai models."
+        "modelflow-ai/openai-adapter": "Adapter to interact with openai models.",
+        "modelflow-ai/qdrant-embeddings-store": "Integration with Qdrant vector database for storing embeddings."
     },
     "scripts": {
         "test-with-coverage": "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml",

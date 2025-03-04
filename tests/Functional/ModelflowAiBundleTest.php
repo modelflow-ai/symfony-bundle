@@ -59,11 +59,11 @@ class ModelflowAiBundleTest extends BundleTestCase
 
         /** @var string[] $bundles */
         $bundles = $containerBuilder->getParameter('kernel.bundles');
-        foreach ($case['expects']['bundles'] as $bundle) {
+        foreach ($case['expects']['bundles'] ?? [] as $bundle) {
             $this->assertContains($bundle, $bundles);
         }
 
-        foreach ($case['expects']['services'] as $id => $serviceDefinition) {
+        foreach ($case['expects']['services'] ?? [] as $id => $serviceDefinition) {
             $this->assertArrayHasKey($id, $containerBuilder->getDefinitions());
             $definition = $containerBuilder->getDefinition($id);
             if (isset($serviceDefinition['class'])) {
@@ -83,7 +83,7 @@ class ModelflowAiBundleTest extends BundleTestCase
             }
         }
 
-        foreach ($case['expects']['aliases'] as $alias => $id) {
+        foreach ($case['expects']['aliases'] ?? [] as $alias => $id) {
             $this->assertArrayHasKey($alias, $containerBuilder->getAliases());
             $this->assertSame($id, (string) $containerBuilder->getAlias($alias));
         }

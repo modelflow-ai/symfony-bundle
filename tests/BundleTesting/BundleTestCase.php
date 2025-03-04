@@ -50,13 +50,13 @@ class BundleTestCase extends KernelTestCase
      * @return array{
      *      configuration: array<string, mixed>,
      *      expects: array{
-     *          bundles: string[],
-     *          services: array<string, array{
+     *          bundles?: string[],
+     *          services?: array<string, array{
      *              class?: string,
      *              tags?: array<string, array<string, mixed>>,
      *              aliases?: array<string, string>,
      *          }>,
-     *          aliases: array<string, string>,
+     *          aliases?: array<string, string>,
      *      },
      *  }
      */
