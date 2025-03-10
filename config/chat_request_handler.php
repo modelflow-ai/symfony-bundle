@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
+use ModelflowAi\Chat\ChatPackage;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 use ModelflowAi\Chat\ToolInfo\ToolExecutorInterface;
 use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
@@ -24,6 +25,10 @@ use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
  * @internal
  */
 return static function (ContainerConfigurator $container) {
+    if (!\class_exists(ChatPackage::class)) {
+        return;
+    }
+
     $container->services()
         ->set('modelflow_ai.chat_request_handler.decision_tree', DecisionTreeDecorator::class)
         ->args([

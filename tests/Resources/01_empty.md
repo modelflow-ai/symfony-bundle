@@ -12,13 +12,13 @@ modelflow_ai: []
 bundles:
     - ModelflowAi\Integration\Symfony\ModelflowAiBundle
 
-services:
+not-services:
     modelflow_ai.chat_request_handler: ~
     modelflow_ai.chat_request_handler.decision_tree: ~
     modelflow_ai.command.chat:
         tags:
             - { name: console.command, command: modelflow-ai:chat }
-aliases:
+not-aliases:
     ModelflowAi\DecisionTree\DecisionTreeInterface: modelflow_ai.chat_request_handler.decision_tree
     ModelflowAi\Chat\AIChatRequestHandlerInterface: modelflow_ai.chat_request_handler
 ```

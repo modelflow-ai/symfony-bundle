@@ -71,6 +71,5 @@ services:
     modelflow_ai.image_request_handler: ~
 
 aliases:
-    ModelflowAi\DecisionTree\DecisionTreeInterface: modelflow_ai.chat_request_handler.decision_tree
     ModelflowAi\Chat\AIChatRequestHandlerInterface: modelflow_ai.chat_request_handler
 ```

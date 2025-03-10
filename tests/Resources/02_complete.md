@@ -130,6 +130,5 @@ services:
             - { name: "modelflow_ai.completion_request_handler.decision_tree.rule" }
         
 aliases:
-    ModelflowAi\DecisionTree\DecisionTreeInterface: modelflow_ai.chat_request_handler.decision_tree
     ModelflowAi\Chat\AIChatRequestHandlerInterface: modelflow_ai.chat_request_handler
 ```

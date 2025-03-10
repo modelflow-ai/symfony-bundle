@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use ModelflowAi\Experts\ExpertsPackage;
 use ModelflowAi\Experts\ThreadFactory;
 use ModelflowAi\Experts\ThreadFactoryInterface;
 
@@ -20,6 +21,10 @@ use ModelflowAi\Experts\ThreadFactoryInterface;
  * @internal
  */
 return static function (ContainerConfigurator $container) {
+    if (!\class_exists(ExpertsPackage::class)) {
+        return;
+    }
+
     $container->services()
         ->set('modelflow_ai.experts.thread_factory', ThreadFactory::class)
         ->args([

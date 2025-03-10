@@ -15,6 +15,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use ModelflowAi\Completion\AICompletionRequestHandler;
 use ModelflowAi\Completion\AICompletionRequestHandlerInterface;
+use ModelflowAi\Completion\CompletionPackage;
 use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
 
@@ -22,6 +23,10 @@ use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
  * @internal
  */
 return static function (ContainerConfigurator $container) {
+    if (!\class_exists(CompletionPackage::class)) {
+        return;
+    }
+
     $container->services()
         ->set('modelflow_ai.completion_request_handler.decision_tree', DecisionTreeDecorator::class)
         ->args([

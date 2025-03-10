@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreFactory;
 use ModelflowAi\Embeddings\Store\Filesystem\FilesystemEmbeddingsStoreFactory;
 use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStoreFactory;
@@ -21,6 +22,10 @@ use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStoreFactory;
  * @internal
  */
 return static function (ContainerConfigurator $container) {
+    if (!\class_exists(EmbeddingsPackage::class)) {
+        return;
+    }
+
     $container->services()
         ->set('modelflow_ai.embeddings_store_factory', EmbeddingsStoreFactory::class)
         ->arg('$factories', tagged_iterator('modelflow_ai.embeddings_store_factory'));

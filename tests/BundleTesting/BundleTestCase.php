@@ -57,6 +57,8 @@ class BundleTestCase extends KernelTestCase
      *              aliases?: array<string, string>,
      *          }>,
      *          aliases?: array<string, string>,
+     *          not_services?: string[],
+     *          not_aliases?: array<string, string>,
      *      },
      *  }
      */

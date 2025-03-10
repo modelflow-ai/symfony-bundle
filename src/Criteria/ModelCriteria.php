@@ -61,6 +61,5 @@ enum ModelCriteria: string implements CriteriaInterface
     case STABLE_DIFFUSSION_XL_1024_FIREWORKS = 'stable-diffusion-xl-1024-v1-0';
 
     // Google Gemini
-    case GEMINI_1_5_PRO = 'gemini-pro';
-    case GEMINI_1_5_FLASH = 'gemini-1.5-flash';
+    case GEMINI_2_0_FLASH = 'gemini-2.0-flash';
 }

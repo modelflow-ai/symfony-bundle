@@ -16,6 +16,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use ModelflowAi\Image\AIImageRequestHandler;
 use ModelflowAi\Image\AIImageRequestHandlerInterface;
+use ModelflowAi\Image\ImagePackage;
 use ModelflowAi\Image\Middleware\HandleMiddleware;
 use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
@@ -24,6 +25,10 @@ use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
  * @internal
  */
 return static function (ContainerConfigurator $container) {
+    if (!\class_exists(ImagePackage::class)) {
+        return;
+    }
+
     $container->services()
         ->set('modelflow_ai.image_request_handler.decision_tree', DecisionTreeDecorator::class)
         ->args([
