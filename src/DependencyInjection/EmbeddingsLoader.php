@@ -16,8 +16,14 @@ namespace ModelflowAi\Integration\Symfony\DependencyInjection;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\EmbeddingsPackage;
+use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
+use ModelflowAi\Embeddings\EmbeddingsRequestHandlerInterface;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
+use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
+use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandlerInterface;
+use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
+use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandlerInterface;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
@@ -27,11 +33,22 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @phpstan-import-type EmbeddingGeneratorConfigType from ModelflowAiBundle
  * @phpstan-import-type EmbeddingStoreConfigType from ModelflowAiBundle
+ * @phpstan-import-type EmbeddingRequestHandlerConfigType from ModelflowAiBundle
  */
-final readonly class EmbeddingsLoader
+final class EmbeddingsLoader
 {
+    /**
+     * @var string[]
+     */
+    private array $defaultGeneratorSet = [];
+
+    /**
+     * @var string[]
+     */
+    private array $defaultStoreSet = [];
+
     public function __construct(
-        private ContainerConfigurator $container,
+        private readonly ContainerConfigurator $container,
     ) {
         // Check if embeddings package is installed
         if (!\class_exists(EmbeddingsPackage::class)) {
@@ -101,6 +118,13 @@ final readonly class EmbeddingsLoader
                 new Reference($prefix . '.formatter'),
                 new Reference($adapterId),
             ]);
+
+        // If this is marked as the default generator, alias it
+        if ('default' === $key || ([] === $this->defaultGeneratorSet && $embedding['enabled'])) {
+            $this->container->services()
+                ->alias('modelflow_ai.embeddings.default_generator', $prefix . '.generator');
+            $this->defaultGeneratorSet[] = $key;
+        }
     }
 
     /**
@@ -113,11 +137,69 @@ final readonly class EmbeddingsLoader
             throw new \Exception('Embedding store DSN is not set');
         }
 
+        $serviceId = 'modelflow_ai.embeddings.store.' . $key;
+
         $this->container->services()
-            ->set('modelflow_ai.embeddings.store.' . $key, EmbeddingsStoreInterface::class)
+            ->set($serviceId, EmbeddingsStoreInterface::class)
             ->factory([new Reference('modelflow_ai.embeddings_store_factory'), 'create'])
             ->args([
                 $store['dsn'],
             ]);
+
+        // If this is marked as the default store, alias it
+        if ('default' === $key || ([] === $this->defaultStoreSet && $store['enabled'])) {
+            $this->container->services()
+                ->alias('modelflow_ai.embeddings.default_store', $serviceId);
+            $this->defaultStoreSet[] = $key;
+        }
+    }
+
+    /**
+     * @param EmbeddingRequestHandlerConfigType $config
+     */
+    public function loadRequestHandler(array $config): void
+    {
+        if (!$config['enabled']) {
+            return;
+        }
+
+        // Register class to key mapping
+        $classToKeyMapping = [];
+        // @phpstan-ignore-next-line
+        if (isset($config['mapping'])) {
+            foreach ($config['mapping'] as $class => $mappingConfig) {
+                $classToKeyMapping[$class] = $mappingConfig['key'];
+            }
+        }
+
+        // Set up the store handler
+        $this->container->services()
+            ->set('modelflow_ai.embeddings.store_handler', EmbeddingsStoreHandlerInterface::class)
+            ->class(EmbeddingsStoreHandler::class)
+            ->args([
+                $classToKeyMapping ?: [],
+            ]);
+
+        // Set up the similarity handler
+        $this->container->services()
+            ->set('modelflow_ai.embeddings.similarity_handler', EmbeddingsSimilarityHandlerInterface::class)
+            ->class(EmbeddingsSimilarityHandler::class)
+            ->args([
+                new Reference('modelflow_ai.embeddings.generator.default'),
+                $classToKeyMapping ?: [],
+            ]);
+
+        // Set up the request handler
+        $this->container->services()
+            ->set('modelflow_ai.embeddings.request_handler', EmbeddingsRequestHandlerInterface::class)
+            ->class(EmbeddingsRequestHandler::class)
+            ->args([
+                new Reference('modelflow_ai.embeddings.store_handler'),
+                new Reference('modelflow_ai.embeddings.similarity_handler'),
+            ]);
+
+        // Create alias for the request handler
+        $this->container->services()
+            ->alias(EmbeddingsRequestHandlerInterface::class, 'modelflow_ai.embeddings.request_handler');
     }
 }

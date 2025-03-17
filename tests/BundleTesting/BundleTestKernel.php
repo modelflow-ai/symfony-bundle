@@ -49,6 +49,6 @@ abstract class BundleTestKernel extends Kernel
     {
         $cacheDir = parent::getCacheDir();
 
-        return $cacheDir . '/' . \md5((string) \json_encode($this->configuration));
+        return $cacheDir . '/' . \md5((string) \json_encode($this->configuration, \JSON_THROW_ON_ERROR));
     }
 }

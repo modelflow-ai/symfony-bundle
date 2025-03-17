@@ -59,6 +59,9 @@ class BundleTestCase extends KernelTestCase
      *          aliases?: array<string, string>,
      *          not_services?: string[],
      *          not_aliases?: array<string, string>,
+     *          exception?: array{
+     *              message: string,
+     *          },
      *      },
      *  }
      */
@@ -67,19 +70,19 @@ class BundleTestCase extends KernelTestCase
         /** @var string $content */
         $content = \file_get_contents($file);
 
-        \preg_match('/## Configuration\n\n```yaml\n(.*?)\n```\n/s', $content, $configMatches);
-        \preg_match('/## Expects\n\n```yaml\n(.*?)\n```\n/s', $content, $expectsMatches);
+        \preg_match('/## Configuration\n\n```yaml\n(.*?)\n```\n?/s', $content, $configMatches);
+        \preg_match('/## Expects\n\n```yaml\n(.*?)\n```\n?/s', $content, $expectsMatches);
 
         /** @var array<string, mixed> $config */
         $config = Yaml::parse($configMatches[1] ?? '');
         /** @var array{
-         * bundles: string[],
-         * services: array<string, array{
-         * class?: string,
-         * tags?: array<string, array<string, mixed>>,
-         * aliases?: array<string, string>,
-         * }>,
-         * aliases: array<string, string>,
+         *     bundles: string[],
+         *     services: array<string, array{
+         *         class?: string,
+         *         tags?: array<string, array<string, mixed>>,
+         *         aliases?: array<string, string>,
+         *     }>,
+         *     aliases: array<string, string>,
          * } $expects */
         $expects = Yaml::parse($expectsMatches[1] ?? '');
 

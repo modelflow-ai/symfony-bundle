@@ -131,9 +131,17 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *     enabled: bool,
  *     dsn: string,
  * }
+ * @phpstan-type EmbeddingClassMappingType array{
+ *     key: string
+ * }
+ * @phpstan-type EmbeddingRequestHandlerConfigType array{
+ *     enabled: bool,
+ *     mapping: array<string, EmbeddingClassMappingType>,
+ * }
  * @phpstan-type EmbeddingsConfigType array{
  *     generators?: array<string, EmbeddingGeneratorConfigType>,
  *     stores?: array<string, EmbeddingStoreConfigType>,
+ *     request_handler?: EmbeddingRequestHandlerConfigType
  * }
  * @phpstan-type ExpertConfigType array{
  *     name: string,
@@ -317,6 +325,7 @@ class ModelflowAiBundle extends AbstractBundle
         return [
             'generators' => $config['generators'] ?? [],
             'stores' => $config['stores'] ?? [],
+            'request_handler' => $config['request_handler'] ?? ['enabled' => false, 'mapping' => []],
         ];
     }
 
@@ -461,21 +470,42 @@ class ModelflowAiBundle extends AbstractBundle
     {
         $generators = $embeddingsConfig['generators'] ?? [];
         $stores = $embeddingsConfig['stores'] ?? [];
+        $requestHandler = $embeddingsConfig['request_handler'] ?? ['enabled' => false];
 
         $container->import(\dirname(__DIR__) . '/config/embeddings.php');
 
-        if (empty($generators) && empty($stores)) {
+        if (empty($generators) && empty($stores) && !$requestHandler['enabled']) {
             return;
         }
 
         $embeddingsLoader = new EmbeddingsLoader($container);
 
+        // Load generators first
+        $hasEnabledGenerator = false;
         foreach ($generators as $key => $embedding) {
+            if ($embedding['enabled']) {
+                $hasEnabledGenerator = true;
+            }
             $embeddingsLoader->loadGenerator($key, $embedding);
         }
 
+        // Load stores
         foreach ($stores as $key => $store) {
             $embeddingsLoader->loadStore($key, $store);
+        }
+
+        // Load request handler if enabled
+        if ($requestHandler['enabled']) {
+            // Ensure there's at least one generator available for similarity searches
+            if (!$hasEnabledGenerator) {
+                throw new \Exception(
+                    'EmbeddingsRequestHandler is enabled but no embedding generator is configured.
+                    You must enable at least one generator in embeddings.generators configuration.',
+                );
+            }
+
+            // @phpstan-ignore-next-line
+            $embeddingsLoader->loadRequestHandler($requestHandler);
         }
     }
 
@@ -507,7 +537,7 @@ class ModelflowAiBundle extends AbstractBundle
         $result = [];
         foreach ($array as $key => $value) {
             if (\is_array($value)) {
-                $result = \array_merge($result, $this->flattenArray($value, $prefix . $key . '.'));
+                $result = [...$result, ...$this->flattenArray($value, $prefix . $key . '.')];
             } else {
                 $result[$prefix . $key] = $value;
             }

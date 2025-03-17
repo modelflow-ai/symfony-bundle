@@ -219,7 +219,7 @@ final class BundleConfiguration
                         $enabled = $value['enabled'] ?? false;
                         unset($value['enabled']);
 
-                        if (!$explicitlyDisabled && 0 !== \count($value)) {
+                        if (!$explicitlyDisabled && 0 !== (\is_countable($value) ? \count($value) : 0)) {
                             $enabled = true;
                         }
 
@@ -297,6 +297,20 @@ final class BundleConfiguration
                     ->children()
                         ->booleanNode('enabled')->defaultTrue()->end()
                         ->scalarNode('dsn')->end()
+                    ->end()
+                ->end()
+            ->end()
+            ->arrayNode('request_handler')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode('enabled')->defaultFalse()->end()
+                    ->arrayNode('mapping')
+                        ->useAttributeAsKey('class')
+                        ->arrayPrototype()
+                            ->children()
+                                ->scalarNode('key')->isRequired()->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()

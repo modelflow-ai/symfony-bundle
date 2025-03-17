@@ -43,6 +43,14 @@ class ModelflowAiBundleTest extends BundleTestCase
     public function testBundleConfiguration(\SplFileInfo $file): void
     {
         $testCase = self::readMarkdownFile($file->getPathname());
+
+        // Handle test cases that expect exceptions
+        if (isset($testCase['expects']['exception'])) {
+            $this->markdownTestExpectedException($testCase['configuration'], $testCase['expects']['exception']);
+
+            return;
+        }
+
         $containerBuilder = $this->buildContainerFromConfiguration($testCase['configuration']);
 
         $this->assertExpectedBundles($containerBuilder, $testCase['expects']['bundles'] ?? []);
@@ -50,6 +58,35 @@ class ModelflowAiBundleTest extends BundleTestCase
         $this->assertExpectedAliases($containerBuilder, $testCase['expects']['aliases'] ?? []);
         $this->assertNotExpectedServices($containerBuilder, $testCase['expects']['not_services'] ?? []);
         $this->assertNotExpectedAliases($containerBuilder, $testCase['expects']['not_aliases'] ?? []);
+    }
+
+    /**
+     * Test for configurations that are expected to throw exceptions
+     * Verifies that the expected exception is thrown with the expected message.
+     *
+     * @param array<string, mixed> $configuration
+     * @param array{
+     *     message: string,
+     * } $expectedException
+     */
+    public function markdownTestExpectedException(array $configuration, array $expectedException): void
+    {
+        $exceptionThrown = false;
+        $exceptionMessage = '';
+
+        try {
+            $this->buildContainerFromConfiguration($configuration);
+        } catch (\Exception $e) {
+            $exceptionThrown = true;
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertTrue($exceptionThrown, 'Expected an exception when building container with invalid configuration');
+        $this->assertStringContainsString(
+            $expectedException['message'],
+            $exceptionMessage,
+            'Exception message should contain the expected text',
+        );
     }
 
     /**
@@ -195,7 +232,7 @@ class ModelflowAiBundleTest extends BundleTestCase
      */
     private function assertNotExpectedServices(ContainerBuilder $containerBuilder, array $notExpectedServices): void
     {
-        foreach ($notExpectedServices as $id) {
+        foreach (\array_keys($notExpectedServices) as $id) {
             $this->assertArrayNotHasKey(
                 $id,
                 $containerBuilder->getDefinitions(),
@@ -211,7 +248,7 @@ class ModelflowAiBundleTest extends BundleTestCase
      */
     private function assertNotExpectedAliases(ContainerBuilder $containerBuilder, array $notExpectedAliases): void
     {
-        foreach ($notExpectedAliases as $alias) {
+        foreach (\array_keys($notExpectedAliases) as $alias) {
             $this->assertArrayNotHasKey(
                 $alias,
                 $containerBuilder->getAliases(),
