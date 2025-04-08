@@ -56,6 +56,12 @@ bundles:
     - ModelflowAi\Integration\Symfony\ModelflowAiBundle
 
 services:
+    modelflow_ai.chat.tool_executor:
+        class: ModelflowAi\Chat\ToolInfo\ToolExecutor
+    modelflow_ai.chat.middleware.tool_execution:
+        class: ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware
+        tags:
+            - { name: "modelflow_ai.chat.middleware" }
     modelflow_ai.chat_request_handler: ~
     modelflow_ai.chat_request_handler.decision_tree: ~
     modelflow_ai.command.chat:

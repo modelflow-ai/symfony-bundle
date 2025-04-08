@@ -16,6 +16,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\ChatPackage;
+use ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 use ModelflowAi\Chat\ToolInfo\ToolExecutorInterface;
 use ModelflowAi\Integration\Symfony\DecisionTree\DecisionTreeDecorator;
@@ -36,13 +37,22 @@ return static function (ContainerConfigurator $container) {
         ]);
 
     $container->services()
+        ->set('modelflow_ai.chat.tool_executor', ToolExecutor::class)
+        ->alias(ToolExecutorInterface::class, 'modelflow_ai.chat.tool_executor');
+
+    $container->services()
+        ->set('modelflow_ai.chat.middleware.tool_execution', ToolExecutionMiddleware::class)
+        ->args([
+            service('modelflow_ai.chat.tool_executor'),
+            10,
+        ])
+        ->tag('modelflow_ai.chat.middleware');
+
+    $container->services()
         ->set('modelflow_ai.chat_request_handler', AIChatRequestHandler::class)
         ->args([
             service('modelflow_ai.chat_request_handler.decision_tree'),
+            tagged_iterator('modelflow_ai.chat.middleware'),
         ])
         ->alias(AIChatRequestHandlerInterface::class, 'modelflow_ai.chat_request_handler');
-
-    $container->services()
-        ->set('modelflow_ai.tool_executor', ToolExecutor::class)
-        ->alias(ToolExecutorInterface::class, 'modelflow_ai.tool_executor');
 };
