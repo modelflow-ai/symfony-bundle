@@ -268,7 +268,7 @@ final class BundleConfiguration
                         ->arrayNode('splitter')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->enumNode('type')->values(['default', 'service'])->defaultValue('default')->end()
+                                ->enumNode('type')->values(['default', 'service', 'none'])->defaultValue('default')->end()
                                 ->scalarNode('service_id')
                                     ->info('Service ID of the EmbeddingSplitterInterface implementation')
                                 ->end()

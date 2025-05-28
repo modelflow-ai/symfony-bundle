@@ -121,6 +121,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *     }|array{
  *         type: "service",
  *         service_id?: string,
+ *     }|array{
+ *         type: "none"
  *     },
  *     cache?: array{
  *         enabled: bool,

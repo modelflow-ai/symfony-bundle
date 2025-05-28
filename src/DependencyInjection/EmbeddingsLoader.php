@@ -25,6 +25,7 @@ use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandlerInterface;
 use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
 use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandlerInterface;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Embeddings\Splitter\NoOpEmbeddingSplitter;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -98,6 +99,9 @@ final class EmbeddingsLoader
                 throw new \Exception('Embedding splitter service ID is not set');
             }
             $this->container->services()->alias($prefix . '.splitter', $embedding['splitter']['service_id']);
+        } elseif ('none' === $embedding['splitter']['type']) {
+            $this->container->services()
+                ->set($prefix . '.splitter', NoOpEmbeddingSplitter::class);
         } else {
             $this->container->services()
                 ->set($prefix . '.splitter', EmbeddingSplitter::class)
