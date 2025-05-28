@@ -3959,7 +3959,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "24eb0c952535588ea13f368ab582a28d33481338"
+                "reference": "aa6141ce3db78fe179813c16c05aedfa7315f306"
             },
             "require": {
                 "modelflow-ai/mistral": "^0.4",
@@ -3978,6 +3978,7 @@
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
+                "symfony/cache": "7.4.x-dev",
                 "symfony/dotenv": "7.1.x-dev"
             },
             "suggest": {
@@ -4160,7 +4161,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "f66c3b78a81d038a447018ea21ca90bbafee4549"
+                "reference": "4c0bf553baefa339e708d4b1a0cd8993f338edc0"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -4181,6 +4182,7 @@
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
+                "symfony/cache": "7.4.x-dev",
                 "symfony/dotenv": "^7.2"
             },
             "suggest": {
@@ -4266,7 +4268,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "72155176ec69159811daf9fcd0d25fbc508fe4b9"
+                "reference": "08eae45b40c5651819865e3d8fd460b01aa50378"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
@@ -4289,6 +4291,7 @@
                 "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
+                "symfony/cache": "7.4.x-dev",
                 "symfony/console": "^7.1",
                 "symfony/dotenv": "^7.1"
             },
