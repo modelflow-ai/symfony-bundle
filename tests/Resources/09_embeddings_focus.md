@@ -55,6 +55,8 @@ services:
     # OpenAI Embedding Generator
     modelflow_ai.embeddings.openai_embeddings.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: openai_embeddings }
     modelflow_ai.embeddings.openai_embeddings.adapter.cache:
         class: ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter
     modelflow_ai.embeddings.openai_embeddings.splitter:
@@ -63,22 +65,34 @@ services:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.openai_embeddings.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: openai_embeddings }
 
     # Mistral Embedding Generator
     modelflow_ai.embeddings.mistral_embeddings.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: mistral_embeddings }
     modelflow_ai.embeddings.mistral_embeddings.formatter:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.mistral_embeddings.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: mistral_embeddings }
 
     # Vector Stores
     modelflow_ai.embeddings.store.filesystem:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: filesystem }
     modelflow_ai.embeddings.store.memory:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: memory }
     modelflow_ai.embeddings.store.qdrant:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: qdrant }
 
     # Embedding Store Factory
     modelflow_ai.embeddings_store_factory: ~

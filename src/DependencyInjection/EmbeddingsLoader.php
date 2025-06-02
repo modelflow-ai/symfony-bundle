@@ -28,6 +28,7 @@ use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Embeddings\Splitter\NoOpEmbeddingSplitter;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
+use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -79,7 +80,8 @@ final class EmbeddingsLoader
             )
             ->args([
                 $embedding,
-            ]);
+            ])
+            ->tag('modelflow_ai.embeddings.adapter', ['key' => $key]);
 
         // Add cache if enabled
         if ($embedding['cache']['enabled'] ?? false) {
@@ -121,7 +123,8 @@ final class EmbeddingsLoader
                 new Reference($prefix . '.splitter'),
                 new Reference($prefix . '.formatter'),
                 new Reference($adapterId),
-            ]);
+            ])
+            ->tag('modelflow_ai.embeddings.generator', ['key' => $key]);
 
         // If this is marked as the default generator, alias it
         if ('default' === $key || ([] === $this->defaultGeneratorSet && $embedding['enabled'])) {
@@ -148,7 +151,8 @@ final class EmbeddingsLoader
             ->factory([new Reference('modelflow_ai.embeddings_store_factory'), 'create'])
             ->args([
                 $store['dsn'],
-            ]);
+            ])
+            ->tag('modelflow_ai.embeddings.store', ['key' => $key]);
 
         // If this is marked as the default store, alias it
         if ('default' === $key || ([] === $this->defaultStoreSet && $store['enabled'])) {
@@ -181,6 +185,9 @@ final class EmbeddingsLoader
             ->set('modelflow_ai.embeddings.store_handler', EmbeddingsStoreHandlerInterface::class)
             ->class(EmbeddingsStoreHandler::class)
             ->args([
+                new TaggedIteratorArgument('modelflow_ai.embeddings.generator', indexAttribute: 'key'),
+                new TaggedIteratorArgument('modelflow_ai.embeddings.store', indexAttribute: 'key'),
+                new TaggedIteratorArgument('modelflow_ai.embeddings.adapter', indexAttribute: 'key'),
                 $classToKeyMapping ?: [],
             ]);
 
@@ -189,8 +196,8 @@ final class EmbeddingsLoader
             ->set('modelflow_ai.embeddings.similarity_handler', EmbeddingsSimilarityHandlerInterface::class)
             ->class(EmbeddingsSimilarityHandler::class)
             ->args([
-                new Reference('modelflow_ai.embeddings.generator.default'),
-                $classToKeyMapping ?: [],
+                new TaggedIteratorArgument('modelflow_ai.embeddings.store', indexAttribute: 'key'),
+                new TaggedIteratorArgument('modelflow_ai.embeddings.adapter', indexAttribute: 'key'),
             ]);
 
         // Set up the request handler

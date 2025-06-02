@@ -49,36 +49,50 @@ services:
     # OpenAI Ada Embedding Generator
     modelflow_ai.embeddings.openai_ada.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: openai_ada }
     modelflow_ai.embeddings.openai_ada.splitter:
         class: ModelflowAi\Embeddings\Splitter\EmbeddingSplitter
     modelflow_ai.embeddings.openai_ada.formatter:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.openai_ada.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: openai_ada }
         
     # Default Mistral Embedding Generator
     modelflow_ai.embeddings.default.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: default }
     modelflow_ai.embeddings.default.splitter:
         class: ModelflowAi\Embeddings\Splitter\EmbeddingSplitter
     modelflow_ai.embeddings.default.formatter:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.default.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: default }
 
     # Disabled Generator
     modelflow_ai.embeddings.openai_3_large.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: openai_3_large }
     modelflow_ai.embeddings.openai_3_large.splitter:
         class: ModelflowAi\Embeddings\Splitter\EmbeddingSplitter
     modelflow_ai.embeddings.openai_3_large.formatter:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.openai_3_large.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: openai_3_large }
 
     # Vector Stores
     modelflow_ai.embeddings.store.default:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: default }
 
     # Embedding Store Factory
     modelflow_ai.embeddings_store_factory: ~

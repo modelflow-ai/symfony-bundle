@@ -49,20 +49,30 @@ services:
     # Default Embedding Generator
     modelflow_ai.embeddings.default.adapter:
         class: ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface
+        tags:
+            - { name: modelflow_ai.embeddings.adapter, key: default }
     modelflow_ai.embeddings.default.splitter:
         class: ModelflowAi\Embeddings\Splitter\EmbeddingSplitter
     modelflow_ai.embeddings.default.formatter:
         class: ModelflowAi\Embeddings\Formatter\EmbeddingFormatter
     modelflow_ai.embeddings.default.generator:
         class: ModelflowAi\Embeddings\Generator\EmbeddingGenerator
+        tags:
+            - { name: modelflow_ai.embeddings.generator, key: default }
 
     # Vector Stores
     modelflow_ai.embeddings.store.default:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: default }
     modelflow_ai.embeddings.store.document_store:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: document_store }
     modelflow_ai.embeddings.store.product_store:
         class: ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface
+        tags:
+            - { name: modelflow_ai.embeddings.store, key: product_store }
 
     # Embedding Store Factory
     modelflow_ai.embeddings_store_factory: ~
