@@ -10,6 +10,7 @@ modelflow_ai:
                 chat_factory: "app.my_custom_chat_factory"
                 completion_factory: "app.my_custom_completion_factory"
                 image_factory: "app.my_custom_image_factory"
+                embeddings_factory: "app.my_custom_embeddings_factory"
 
     adapters:
         my_custom_model:

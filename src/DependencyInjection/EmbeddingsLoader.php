@@ -36,6 +36,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @phpstan-import-type EmbeddingGeneratorConfigType from ModelflowAiBundle
  * @phpstan-import-type EmbeddingStoreConfigType from ModelflowAiBundle
  * @phpstan-import-type EmbeddingRequestHandlerConfigType from ModelflowAiBundle
+ * @phpstan-import-type CustomProviderConfigType from ModelflowAiBundle
  */
 final class EmbeddingsLoader
 {
@@ -49,8 +50,12 @@ final class EmbeddingsLoader
      */
     private array $defaultStoreSet = [];
 
+    /**
+     * @param array<string, CustomProviderConfigType> $customProviders
+     */
     public function __construct(
         private readonly ContainerConfigurator $container,
+        private readonly array $customProviders = [],
     ) {
         // Check if embeddings package is installed
         if (!\class_exists(EmbeddingsPackage::class)) {
@@ -69,12 +74,15 @@ final class EmbeddingsLoader
         $prefix = 'modelflow_ai.embeddings.' . $key;
         $adapterId = $prefix . '.adapter';
 
+        // Get the factory service ID - check for custom factory first
+        $factoryServiceId = $this->getEmbeddingFactoryServiceId($embedding['provider']);
+
         // Configure the embedding adapter
         $this->container->services()
             ->set($adapterId, EmbeddingAdapterInterface::class)
             ->factory(
                 [
-                    new Reference('modelflow_ai.providers.' . $embedding['provider'] . '.embedding_adapter_factory'),
+                    new Reference($factoryServiceId),
                     'createEmbeddingAdapter',
                 ],
             )
@@ -212,5 +220,15 @@ final class EmbeddingsLoader
         // Create alias for the request handler
         $this->container->services()
             ->alias(EmbeddingsRequestHandlerInterface::class, 'modelflow_ai.embeddings.request_handler');
+    }
+
+    /**
+     * Get the factory service ID for embedding adapter.
+     * Checks for custom factory first, falls back to default provider factory.
+     */
+    private function getEmbeddingFactoryServiceId(string $provider): string
+    {
+        // Fall back to default provider factory
+        return $this->customProviders[$provider]['embeddings_factory'] ?? \sprintf('modelflow_ai.providers.%s.embedding_adapter_factory', $provider);
     }
 }

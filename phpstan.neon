@@ -7,3 +7,6 @@ parameters:
     excludePaths:
         - vendor/*
         - var/*
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    checkGenericClassInNonGenericObjectType: false

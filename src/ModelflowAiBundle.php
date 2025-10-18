@@ -77,6 +77,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *      chat_factory?: string,
  *      completion_factory?: string,
  *      image_factory?: string,
+ *      embeddings_factory?: string,
  *      criteria: CriteriaInterface[]
  *  }
  * @phpstan-type ProvidersConfigType array{
@@ -247,7 +248,7 @@ class ModelflowAiBundle extends AbstractBundle
         $this->setupChatAdapters($container, $adaptersConfig, $providersConfig);
         $this->setupCompletionAdapters($container, $adaptersConfig, $providersConfig);
         $this->setupImageAdapters($container, $adaptersConfig, $providersConfig);
-        $this->setupEmbeddings($container, $embeddingsConfig);
+        $this->setupEmbeddings($container, $embeddingsConfig, $providersConfig);
         $this->setupExperts($container, $expertsConfig);
     }
 
@@ -368,8 +369,13 @@ class ModelflowAiBundle extends AbstractBundle
 
         // Add embedding config files
         foreach ($embeddingsConfig['generators'] ?? [] as $generator) {
-            $configFiles[] = $generator['provider'] . '/common.php';
-            $configFiles[] = $generator['provider'] . '/embeddings.php';
+            $provider = $generator['provider'];
+            if (\array_key_exists($provider, $providersConfig['customProviders'])) {
+                continue;
+            }
+
+            $configFiles[] = $provider . '/common.php';
+            $configFiles[] = $provider . '/embeddings.php';
         }
 
         return $configFiles;
@@ -467,8 +473,9 @@ class ModelflowAiBundle extends AbstractBundle
 
     /**
      * @param ExtractedEmbeddingsConfigType $embeddingsConfig
+     * @param ExtractedProvidersConfigType $providersConfig
      */
-    private function setupEmbeddings(ContainerConfigurator $container, array $embeddingsConfig): void
+    private function setupEmbeddings(ContainerConfigurator $container, array $embeddingsConfig, array $providersConfig): void
     {
         $generators = $embeddingsConfig['generators'] ?? [];
         $stores = $embeddingsConfig['stores'] ?? [];
@@ -480,7 +487,7 @@ class ModelflowAiBundle extends AbstractBundle
             return;
         }
 
-        $embeddingsLoader = new EmbeddingsLoader($container);
+        $embeddingsLoader = new EmbeddingsLoader($container, $providersConfig['customProviders']);
 
         // Load generators first
         $hasEnabledGenerator = false;
