@@ -69,7 +69,7 @@ services:
         class: ModelflowAi\DecisionTree\DecisionRule
         tags:
             - { name: "modelflow_ai.image_request_handler.decision_tree.rule" }
-        
+
 aliases:
     ModelflowAi\Chat\AIChatRequestHandlerInterface: modelflow_ai.chat_request_handler
     ModelflowAi\Completion\AICompletionRequestHandlerInterface: modelflow_ai.completion_request_handler
