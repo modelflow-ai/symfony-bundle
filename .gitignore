@@ -8,3 +8,4 @@
 /.php-cs-fixer.cache
 /var
 /.idea
+/config/reference.php
