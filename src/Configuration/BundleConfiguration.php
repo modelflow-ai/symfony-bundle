@@ -193,7 +193,7 @@ final class BundleConfiguration
             ->example(DefaultConfigurationProvider::getDefaultValues())
             ->beforeNormalization()
                 ->ifArray()
-                ->then(function ($value) {
+                ->then(static function ($value) {
                     foreach ($value as $key => $item) {
                         $value[$key]['key'] = $key;
                     }
@@ -204,7 +204,7 @@ final class BundleConfiguration
             ->arrayPrototype()
                 ->beforeNormalization()
                     ->ifArray()
-                    ->then(function ($value) {
+                    ->then(static function ($value) {
                         $key = $value['key'];
                         unset($value['key']);
 
@@ -219,7 +219,7 @@ final class BundleConfiguration
                         $value = \array_merge(DefaultConfigurationProvider::getDefaultValues()[$key] ?? [], $value);
                         $value['enabled'] = $enabled;
 
-                        \uksort($value, fn ($key1, $key2) => (
+                        \uksort($value, static fn ($key1, $key2) => (
                             \array_search($key1, ModelflowAiBundle::DEFAULT_ADAPTER_KEY_ORDER, true) >
                             \array_search($key2, ModelflowAiBundle::DEFAULT_ADAPTER_KEY_ORDER, true)
                         ) ? 1 : -1);
@@ -281,7 +281,7 @@ final class BundleConfiguration
                 ->arrayPrototype()
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(fn (string $dsn) => [
+                        ->then(static fn (string $dsn) => [
                             'enabled' => true,
                             'dsn' => $dsn,
                         ])

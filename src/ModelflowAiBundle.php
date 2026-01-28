@@ -289,7 +289,7 @@ class ModelflowAiBundle extends AbstractBundle
      */
     private function extractProvidersConfig(array $config): array
     {
-        $providers = \array_filter($config, fn (array $provider) => $provider['enabled'] ?? false);
+        $providers = \array_filter($config, static fn (array $provider) => $provider['enabled'] ?? false);
 
         $result = [
             'providers' => $providers,
@@ -308,7 +308,7 @@ class ModelflowAiBundle extends AbstractBundle
      */
     private function extractAdaptersConfig(array $config): array
     {
-        $adapters = \array_filter($config, fn (array $adapter) => $adapter['enabled']);
+        $adapters = \array_filter($config, static fn (array $adapter) => $adapter['enabled']);
 
         return [
             'adapters' => $adapters,
