@@ -1,3 +1,6 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
     paths:
         - config
@@ -5,9 +8,9 @@ parameters:
         - tests
     level: max
     excludePaths:
-        - config/reference.php
-        - vendor/*
-        - var/*
+        analyseAndScan:
+            - config/reference.php
+            - vendor/*
+            - var/*
     bootstrapFiles:
         - tests/phpstan-bootstrap.php
-    checkGenericClassInNonGenericObjectType: false

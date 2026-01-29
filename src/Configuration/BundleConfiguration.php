@@ -19,9 +19,9 @@ use ModelflowAi\Integration\Symfony\Config\CriteriaContainer;
 use ModelflowAi\Integration\Symfony\ModelflowAiBundle;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-final class BundleConfiguration
+final readonly class BundleConfiguration
 {
-    public function __construct(private readonly bool $isReferenceDumping)
+    public function __construct(private bool $isReferenceDumping)
     {
     }
 
@@ -343,7 +343,7 @@ final class BundleConfiguration
         $nodeDefinition = new ArrayNodeDefinition('criteria');
         $nodeDefinition
             ->defaultValue(\array_map(
-                fn (CriteriaInterface $criteria) => $this->getCriteria($criteria),
+                $this->getCriteria(...),
                 $default,
             ));
         $nodeDefinition

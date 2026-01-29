@@ -26,8 +26,21 @@ class ModelflowAiBundleTest extends BundleTestCase
      */
     public static function provideMarkdownFiles(): iterable
     {
-        $finder = self::createFinder(__DIR__ . '/../Resources');
-        foreach ($finder->files()->name('*.md') as $file) {
+        $path = __DIR__ . '/../Resources';
+
+        if (!\is_dir($path)) {
+            throw new \RuntimeException(\sprintf('Resources directory not found at: %s', $path));
+        }
+
+        $finder = self::createFinder($path);
+
+        $files = \iterator_to_array($finder->files()->name('*.md'));
+
+        if ([] === $files) {
+            throw new \RuntimeException(\sprintf('No markdown files found in: %s', $path));
+        }
+
+        foreach ($files as $file) {
             yield $file->getBasename() => [$file];
         }
     }
@@ -37,9 +50,7 @@ class ModelflowAiBundleTest extends BundleTestCase
         return (new Finder())->in($path)->sortByName();
     }
 
-    /**
-     * @dataProvider provideMarkdownFiles
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMarkdownFiles')]
     public function testBundleConfiguration(\SplFileInfo $file): void
     {
         $testCase = self::readMarkdownFile($file->getPathname());
