@@ -61,7 +61,7 @@
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^11.0 || ^12.0",
-        "rector/rector": "^2.0",
+        "rector/rector": "^2.6",
         "symfony/yaml": "^6.2 | ^7.0 | ^8.0",
         "symfony/filesystem": "^6.2 | ^7.0 | ^8.0",
         "asapo/remove-vendor-plugin": "^0.1"
